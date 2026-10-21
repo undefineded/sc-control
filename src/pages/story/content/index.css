@@ -1,0 +1,272 @@
+.page {
+  min-height: 100vh;
+  background-color: #f5f7fb;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.top-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 44rpx 40rpx 54rpx;
+  background: linear-gradient(140deg, #ffc266 0%, #ff9f43 50%, #ff8550 100%);
+}
+
+.top-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-kicker {
+  font-size: 19rpx;
+  font-weight: 600;
+  letter-spacing: 4rpx;
+  color: rgba(255, 255, 255, 0.68);
+  margin-bottom: 8rpx;
+}
+
+.top-title {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.top-sub {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.top-badge {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 28rpx;
+  background-color: rgba(255, 255, 255, 0.16);
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.top-badge-num {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4rpx;
+}
+
+.top-badge-text {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  margin-top: -30rpx;
+  padding: 0 28rpx;
+}
+
+.enable-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx 30rpx;
+  border-radius: 24rpx;
+  background-color: #ffffff;
+  box-shadow: 0 12rpx 34rpx rgba(46, 62, 88, 0.09);
+  margin-bottom: 20rpx;
+}
+
+.enable-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.enable-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #222c3a;
+  margin-bottom: 6rpx;
+}
+
+.enable-desc {
+  display: block;
+  font-size: 21rpx;
+  color: #8b96a6;
+}
+
+.info-banner {
+  padding: 22rpx 24rpx;
+  border-radius: 18rpx;
+  background-color: #fff4e6;
+  color: #a97943;
+  font-size: 21rpx;
+  line-height: 1.65;
+  margin-bottom: 20rpx;
+}
+
+.tabs {
+  display: flex;
+  padding: 6rpx;
+  border-radius: 18rpx;
+  background-color: #e9edf4;
+  margin-bottom: 18rpx;
+}
+
+.tab {
+  flex: 1;
+  height: 70rpx;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  color: #7d899b;
+  font-size: 25rpx;
+  font-weight: 500;
+}
+
+.tab.active {
+  background-color: #ffffff;
+  color: #222c3a;
+  box-shadow: 0 4rpx 12rpx rgba(31, 42, 58, 0.08);
+}
+
+.tab-count {
+  font-size: 19rpx;
+  color: #a7b0be;
+}
+
+.bulk-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rpx 14rpx;
+}
+
+.bulk-count {
+  font-size: 21rpx;
+  color: #8b96a6;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
+.bulk-btn {
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background-color: #ffffff;
+  border: 2rpx solid #eef1f6;
+  font-size: 20rpx;
+  color: #68758a;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 22rpx 24rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  border: 2rpx solid #edf0f5;
+  margin-bottom: 12rpx;
+}
+
+.item-row:active {
+  background-color: #fffdf9;
+}
+
+.check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 13rpx;
+  border: 3rpx solid #d7dde7;
+  background-color: #ffffff;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.check.on {
+  background-color: #ff9f43;
+  border-color: #ff9f43;
+}
+
+.check.on::after {
+  content: "";
+  position: absolute;
+  left: 12rpx;
+  top: 5rpx;
+  width: 9rpx;
+  height: 18rpx;
+  border-right: 4rpx solid #ffffff;
+  border-bottom: 4rpx solid #ffffff;
+  transform: rotate(42deg);
+}
+
+.item-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  display: block;
+  font-size: 27rpx;
+  font-weight: 500;
+  color: #222c3a;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-meta {
+  display: block;
+  font-size: 20rpx;
+  color: #a7b0be;
+}
+
+.item-tag {
+  font-size: 20rpx;
+  color: #a7b0be;
+  flex-shrink: 0;
+}
+
+.empty-card {
+  padding: 46rpx 30rpx;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  color: #a7b0be;
+  font-size: 23rpx;
+  margin-bottom: 18rpx;
+}
+
+.note {
+  font-size: 20rpx;
+  line-height: 1.65;
+  color: #a7b0be;
+  padding: 8rpx 4rpx 20rpx;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #ffb35d, #ff8f3e);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 24rpx rgba(255, 143, 62, 0.28);
+  margin-bottom: 16rpx;
+}
