@@ -227,7 +227,7 @@
               class="story-row"
               @tap="playStory(item)"
             >
-              <view class="story-thumb">{{ item.n.slice(0, 1) }}</view>
+              <image class="story-thumb" :src="storyIcon" mode="aspectFill" />
               <view class="story-copy">
                 <text class="story-name">{{ item.n }}</text>
                 <text class="story-meta">故事 · 点击播放</text>
@@ -252,7 +252,7 @@
                 class="folder-row"
                 @tap="enterFolder(group)"
               >
-                <view class="folder-icon">夹</view>
+                <image class="folder-icon" :src="groupIcon(group.name)" mode="aspectFill" />
                 <view class="story-copy">
                   <text class="story-name">{{ group.name }}</text>
                   <text class="story-meta">文件夹 · {{ group.items.length }} 首</text>
@@ -273,7 +273,7 @@
                 class="story-row"
                 @tap="playMusic(item)"
               >
-                <view class="story-thumb music-thumb">音</view>
+                <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
                 <view class="story-copy">
                   <text class="story-name">{{ musicName(item.n) }}</text>
                   <text class="story-meta">{{ status.title === item.n ? '播放中' : '点击播放' }}</text>
@@ -297,7 +297,7 @@
               class="story-row"
               @tap="playMusic(item)"
             >
-              <view class="story-thumb music-thumb">音</view>
+              <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
               <view class="story-copy">
                 <text class="story-name">{{ musicName(item.n) }}</text>
                 <text class="story-meta">{{ item.c }} · {{ status.title === item.n ? '播放中' : '点击播放' }}</text>
@@ -329,6 +329,10 @@
 import { computed, ref } from 'vue'
 import Taro, { useDidShow, useDidHide } from '@tarojs/taro'
 import { storyBle } from '../../../utils/storyBle'
+import folderIcon from '../../../assets/story-icons/folder.png'
+import musicIcon from '../../../assets/story-icons/music.png'
+import nurseryRhymeIcon from '../../../assets/story-icons/nursery-rhyme.png'
+import storyIcon from '../../../assets/story-icons/story.png'
 import './index.css'
 
 const emptyStatus = {
@@ -390,6 +394,8 @@ export default {
       return groups
     })
     const favorites = computed(() => music.value.filter((item) => item.f))
+
+    const groupIcon = (name) => /童谣|儿歌|童歌/.test(name) ? nurseryRhymeIcon : folderIcon
 
     /* 音乐 tab: 先列 SD 卡里的文件夹, 点进去再看该文件夹的歌曲 */
     const folderCi = ref(null)
@@ -742,6 +748,9 @@ export default {
       syncing,
       musicGroups,
       favorites,
+      groupIcon,
+      musicIcon,
+      storyIcon,
       currentFolder,
       enterFolder,
       leaveFolder,

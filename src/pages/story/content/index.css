@@ -184,6 +184,14 @@
   background-color: #fffdf9;
 }
 
+.content-icon {
+  width: 62rpx;
+  height: 62rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
 .check {
   width: 40rpx;
   height: 40rpx;

@@ -56,6 +56,7 @@
             @tap="toggleStory(item)"
           >
             <view :class="['check', { on: item.a }]"></view>
+            <image class="content-icon" :src="storyIcon" mode="aspectFill" />
             <view class="item-copy">
               <text class="item-name">{{ item.n }}</text>
               <text class="item-meta">故事</text>
@@ -73,6 +74,7 @@
             @tap="toggleCategory(item)"
           >
             <view :class="['check', { on: item.a }]"></view>
+            <image class="content-icon" :src="categoryIcon(item.n)" mode="aspectFill" />
             <view class="item-copy">
               <text class="item-name">{{ item.n }}</text>
               <text class="item-meta">音乐分类 · {{ item.c }} 首</text>
@@ -97,6 +99,9 @@
 import { computed, ref } from 'vue'
 import Taro, { useDidShow } from '@tarojs/taro'
 import { storyBle } from '../../../utils/storyBle'
+import folderIcon from '../../../assets/story-icons/folder.png'
+import nurseryRhymeIcon from '../../../assets/story-icons/nursery-rhyme.png'
+import storyIcon from '../../../assets/story-icons/story.png'
 import './index.css'
 
 export default {
@@ -110,6 +115,8 @@ export default {
 
     const storySelected = computed(() => stories.value.filter((item) => item.a).length)
     const catSelected = computed(() => categories.value.filter((item) => item.a).length)
+
+    const categoryIcon = (name) => /童谣|儿歌|童歌/.test(name) ? nurseryRhymeIcon : folderIcon
 
     const toast = (title) => Taro.showToast({ title, icon: 'none', duration: 1800 })
 
@@ -188,6 +195,8 @@ export default {
       categories,
       storySelected,
       catSelected,
+      categoryIcon,
+      storyIcon,
       onEnableChange,
       toggleStory,
       toggleCategory,

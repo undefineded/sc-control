@@ -765,18 +765,9 @@
   width: 76rpx;
   height: 76rpx;
   border-radius: 20rpx;
-  background: linear-gradient(160deg, #6ea6ef, #4b7fd1);
-  color: #ffffff;
-  font-size: 30rpx;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  overflow: hidden;
   flex-shrink: 0;
-}
-
-.music-thumb {
-  background: linear-gradient(160deg, #ffb35d, #ff8f3e);
 }
 
 .story-copy {
@@ -834,13 +825,8 @@
   width: 76rpx;
   height: 76rpx;
   border-radius: 20rpx;
-  background: linear-gradient(160deg, #ffc978, #f5a641);
-  color: #ffffff;
-  font-size: 28rpx;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  overflow: hidden;
   flex-shrink: 0;
 }
 
