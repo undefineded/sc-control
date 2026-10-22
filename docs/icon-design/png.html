@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: transparent; }
+  .grid { display: grid; grid-template-columns: repeat(4, 256px); grid-auto-rows: 256px; width: 1024px; }
+  svg { display: block; width: 256px; height: 256px; }
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<script>
+  const icons = {
+    story: {
+      tint: '#FFF3E7', tilt: -4, d: '#E8830F', m: '#FF9F43', l: '#FFC08A', acc: '#FFC83D',
+      glyph: `
+        <rect x="30" y="76" width="196" height="116" rx="22" fill="var(--d)"/>
+        <rect x="44" y="90" width="80" height="88" rx="10" fill="#FFF6EC"/>
+        <rect x="132" y="90" width="80" height="88" rx="10" fill="#FFF6EC"/>
+        <rect x="122" y="94" width="12" height="80" rx="6" fill="var(--m)"/>
+        <circle cx="84" cy="128" r="15" fill="var(--acc)"/>
+        <circle cx="92" cy="120" r="13" fill="#FFF6EC"/>
+        <path d="M0 -13 L3.8 -4.1 L13 -3.2 L6 3.3 L8 12.5 L0 7.4 L-8 12.5 L-6 3.3 L-13 -3.2 L-3.8 -4.1 Z"
+              transform="translate(172 128) scale(0.95)" fill="var(--acc)"/>
+      `
+    },
+    folder: {
+      tint: '#E6F8F6', tilt: 3, d: '#0E9A90', m: '#12B3A8', l: '#B7EDE9', acc: '#FFC83D',
+      glyph: `
+        <path d="M30 96a18 18 0 0 1 18-18h54a18 18 0 0 1 14.4 7.2L128 102H30z" fill="var(--d)"/>
+        <rect x="30" y="92" width="196" height="106" rx="20" fill="var(--d)"/>
+        <rect x="48" y="102" width="160" height="28" rx="8" fill="var(--l)"/>
+        <rect x="30" y="118" width="196" height="80" rx="20" fill="var(--m)"/>
+      `
+    },
+    music: {
+      tint: '#EAF2FF', tilt: -3, d: '#1F6BFF', m: '#3B8EFF', l: '#A9CCFF', acc: '#FFC83D',
+      glyph: `
+        <ellipse cx="86" cy="184" rx="24" ry="17" transform="rotate(-16 86 184)" fill="var(--m)"/>
+        <rect x="104" y="76" width="13" height="108" rx="6.5" fill="var(--m)"/>
+        <ellipse cx="174" cy="166" rx="24" ry="17" transform="rotate(-16 174 166)" fill="var(--m)"/>
+        <rect x="192" y="58" width="13" height="108" rx="6.5" fill="var(--m)"/>
+        <path d="M104 76 L205 58 L205 84 L104 102 Z" fill="var(--d)"/>
+        <path d="M0 -12 L3.2 -3.2 L12 0 L3.2 3.2 L0 12 L-3.2 3.2 L-12 0 L-3.2 -3.2 Z"
+              transform="translate(56 76)" fill="var(--acc)"/>
+      `
+    },
+    spare: {
+      tint: '#F3F0FF', tilt: -3, d: '#6152EA', m: '#7B6CF6', l: '#D9D4FF', acc: '#FFC83D',
+      glyph: `
+        <ellipse cx="112" cy="180" rx="26" ry="19" transform="rotate(-16 112 180)" fill="var(--m)"/>
+        <rect x="132" y="64" width="14" height="116" rx="7" fill="var(--m)"/>
+        <path d="M146 62 C146 38 166 26 196 22 L196 50 C178 56 166 68 166 88 Z" fill="var(--d)"/>
+        <path d="M0 -11 L2.9 -2.9 L11 0 L2.9 2.9 L0 11 L-2.9 2.9 L-11 0 L-2.9 -2.9 Z"
+              transform="translate(72 96)" fill="var(--acc)"/>
+        <circle cx="202" cy="120" r="6" fill="var(--acc)"/>
+      `
+    }
+  }
+
+  const chubby = {
+    story: `
+      <rect x="28" y="70" width="200" height="128" rx="30" fill="var(--d)"/>
+      <rect x="46" y="90" width="78" height="88" rx="12" fill="#FFF6EC"/>
+      <rect x="132" y="90" width="78" height="88" rx="12" fill="#FFF6EC"/>
+      <rect x="120" y="94" width="16" height="80" rx="8" fill="var(--m)"/>
+      <circle cx="86" cy="128" r="18" fill="var(--acc)"/>
+      <circle cx="96" cy="118" r="15" fill="#FFF6EC"/>
+      <path d="M0 -15 L4.4 -4.7 L15 -3.7 L7 3.8 L9.2 14.4 L0 8.5 L-9.2 14.4 L-7 3.8 L-15 -3.7 L-4.4 -4.7 Z"
+            transform="translate(174 128)" fill="var(--acc)"/>
+    `,
+    folder: `
+      <path d="M28 98a22 22 0 0 1 22-22h56a22 22 0 0 1 17.6 8.8L140 104H28z" fill="var(--d)"/>
+      <rect x="28" y="90" width="200" height="114" rx="26" fill="var(--d)"/>
+      <rect x="44" y="100" width="168" height="32" rx="10" fill="var(--l)"/>
+      <rect x="28" y="116" width="200" height="88" rx="26" fill="var(--m)"/>
+    `,
+    music: `
+      <ellipse cx="82" cy="184" rx="28" ry="20" transform="rotate(-16 82 184)" fill="var(--m)"/>
+      <rect x="102" y="70" width="16" height="114" rx="8" fill="var(--m)"/>
+      <ellipse cx="176" cy="162" rx="28" ry="20" transform="rotate(-16 176 162)" fill="var(--m)"/>
+      <rect x="196" y="50" width="16" height="112" rx="8" fill="var(--m)"/>
+      <path d="M102 70 L212 50 L212 78 L102 98 Z" fill="var(--d)"/>
+      <path d="M0 -13 L3.5 -3.5 L13 0 L3.5 3.5 L0 13 L-3.5 3.5 L-13 0 L-3.5 -3.5 Z"
+            transform="translate(52 74)" fill="var(--acc)"/>
+    `,
+    spare: `
+      <ellipse cx="110" cy="182" rx="30" ry="21" transform="rotate(-16 110 182)" fill="var(--m)"/>
+      <rect x="132" y="58" width="16" height="124" rx="8" fill="var(--m)"/>
+      <path d="M148 56 C148 30 170 16 202 12 L202 44 C182 50 170 64 170 86 Z" fill="var(--d)"/>
+      <path d="M0 -12 L3.2 -3.2 L12 0 L3.2 3.2 L0 12 L-3.2 3.2 L-12 0 L-3.2 -3.2 Z"
+            transform="translate(66 90)" fill="var(--acc)"/>
+      <circle cx="206" cy="116" r="7" fill="var(--acc)"/>
+    `
+  }
+
+  function svg(key, version) {
+    const ic = icons[key]
+    let body
+    if (version === 'c') {
+      body = `<rect width="256" height="256" rx="58" fill="${ic.tint}"/>
+        <g transform="translate(24 24) scale(0.87)">
+          <g transform="rotate(${ic.tilt} 128 128)">${chubby[key]}</g>
+        </g>`
+    } else {
+      body = ic.glyph
+    }
+    return `<svg viewBox="0 0 256 256" style="--d:${ic.d};--m:${ic.m};--l:${ic.l};--acc:${ic.acc}">${body}</svg>`
+  }
+
+  const order = ['story', 'folder', 'music', 'spare']
+  document.getElementById('grid').innerHTML = order.map(k => svg(k, 'c')).join('')
+</script>
+</body>
+</html>
