@@ -252,7 +252,7 @@
                 class="folder-row"
                 @tap="enterFolder(group)"
               >
-                <image class="folder-icon" :src="groupIcon(group.name)" mode="aspectFill" />
+                <image class="folder-icon" :src="folderIcon" mode="aspectFill" />
                 <view class="story-copy">
                   <text class="story-name">{{ group.name }}</text>
                   <text class="story-meta">文件夹 · {{ group.items.length }} 首</text>
@@ -331,7 +331,6 @@ import Taro, { useDidShow, useDidHide } from '@tarojs/taro'
 import { storyBle } from '../../../utils/storyBle'
 import folderIcon from '../../../assets/story-icons/folder.png'
 import musicIcon from '../../../assets/story-icons/music.png'
-import nurseryRhymeIcon from '../../../assets/story-icons/nursery-rhyme.png'
 import storyIcon from '../../../assets/story-icons/story.png'
 import { releaseLinkFor } from '../../../utils/link'
 import './index.css'
@@ -395,8 +394,6 @@ export default {
       return groups
     })
     const favorites = computed(() => music.value.filter((item) => item.f))
-
-    const groupIcon = (name) => /童谣|儿歌|童歌/.test(name) ? nurseryRhymeIcon : folderIcon
 
     /* 音乐 tab: 先列 SD 卡里的文件夹, 点进去再看该文件夹的歌曲 */
     const folderCi = ref(null)
@@ -751,7 +748,7 @@ export default {
       syncing,
       musicGroups,
       favorites,
-      groupIcon,
+      folderIcon,
       musicIcon,
       storyIcon,
       currentFolder,
