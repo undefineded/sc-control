@@ -16,7 +16,8 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
       828: 1.81 / 2
     },
     sourceRoot: 'src',
-    outputRoot: 'dist',
+    /* H5 产物单独放, 不要覆盖微信开发者工具正在监控的 dist/ */
+    outputRoot: process.env.TARO_ENV === 'h5' ? 'dist-h5' : 'dist',
     plugins: [
       "@tarojs/plugin-generator"
     ],
