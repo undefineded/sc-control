@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>方案 A · 星图中枢</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  .a-hero {
+    position: relative;
+    padding: 20px 24px 14px;
+    background:
+      radial-gradient(120% 85% at 50% -12%, #4a86e4 0%, #1e4482 44%, #0a1730 100%);
+    overflow: hidden;
+  }
+  .a-hero::after {
+    content: "";
+    position: absolute;
+    left: -40px;
+    right: -40px;
+    bottom: -70px;
+    height: 130px;
+    background: radial-gradient(60% 100% at 50% 0%, rgba(90, 150, 255, 0.22), transparent 70%);
+  }
+  .star { position: absolute; border-radius: 50%; background: #fff; }
+
+  .a-head { position: relative; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; }
+  .a-kicker {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.2px;
+    color: rgba(170, 205, 255, 0.72);
+  }
+  .a-title { margin-top: 5px; font-size: 24px; font-weight: 700; letter-spacing: 0.4px; color: #fff; }
+  .a-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding: 0 11px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 10.5px;
+    color: rgba(235, 244, 255, 0.92);
+  }
+
+  /* ---- constellation ---- */
+  .a-map { position: relative; z-index: 2; width: 342px; height: 232px; margin: 6px auto 0; }
+  .a-svg { position: absolute; inset: 0; width: 342px; height: 232px; }
+
+  .nd { position: absolute; width: 46px; }
+  .nd-ic {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 22px rgba(4, 14, 34, 0.35);
+  }
+  .nd-ic .ic { width: 21px; height: 21px; stroke-width: 1.7; }
+  .nd-label {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9.5px;
+    line-height: 1;
+    color: rgba(214, 230, 255, 0.72);
+    white-space: nowrap;
+  }
+  .nd-label.up { top: -15px; }
+  .nd-dot {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #35d18a;
+    border: 2px solid #12305f;
+  }
+  .nd.fan .nd-ic { color: #9cc8ff; }
+  .nd.story .nd-ic { color: #ffc07a; }
+  .nd.center { left: 140px; top: 84px; width: 62px; }
+  .nd.center .nd-ic {
+    width: 62px;
+    height: 62px;
+    background: linear-gradient(160deg, #ffffff 0%, #dfeaff 100%);
+    border: 0;
+    color: #2f7dff;
+    box-shadow: 0 0 0 6px rgba(120, 175, 255, 0.1), 0 14px 34px rgba(4, 18, 44, 0.45);
+  }
+  .nd.center .nd-ic .ic { width: 26px; height: 26px; stroke-width: 1.9; }
+  .nd.empty { width: 38px; }
+  .nd.empty .nd-ic {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(160, 195, 245, 0.34);
+    box-shadow: none;
+    color: rgba(190, 215, 250, 0.55);
+  }
+  .nd.empty .nd-label { top: 43px; color: rgba(180, 205, 240, 0.5); }
+  .nd.empty .nd-ic .ic { width: 15px; height: 15px; }
+
+  .a-env {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 24px;
+    font-size: 10.5px;
+    color: rgba(198, 219, 250, 0.72);
+  }
+  .a-env i { width: 1px; height: 9px; background: rgba(255, 255, 255, 0.16); }
+
+  /* ---- scenes ---- */
+  .a-scenes { display: flex; gap: 9px; }
+  .a-scene {
+    position: relative;
+    flex: 1;
+    padding: 11px 11px 10px;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(22, 40, 72, 0.04);
+  }
+  .a-scene .sc-ic { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 9px; margin-bottom: 7px; }
+  .a-scene .sc-ic .ic { width: 15px; height: 15px; }
+  .a-scene .sc-name { font-size: 12.5px; font-weight: 600; }
+  .a-scene .sc-sub { margin-top: 1px; font-size: 9.5px; color: var(--sub); }
+  .sc-sleep { background: linear-gradient(155deg, #e9ebff, #f7f8ff); }
+  .sc-sleep .sc-ic { background: #dcdefc; color: #6152ea; }
+  .sc-cool { background: linear-gradient(155deg, #e2f0ff, #f6fbff); }
+  .sc-cool .sc-ic { background: #cfe6ff; color: #2f7dff; }
+  .sc-story { background: linear-gradient(155deg, #ffeeda, #fffaf3); }
+  .sc-story .sc-ic { background: #ffe0bb; color: #e8830f; }
+
+  /* ---- device rows ---- */
+  .a-rows { background: #fff; border-radius: 20px; box-shadow: var(--sh); overflow: hidden; }
+  .a-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+  .a-row + .a-row { border-top: 1px solid var(--line); }
+  .a-row-id { flex: 1; min-width: 0; }
+  .a-row-name { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; }
+  .a-row-sub { margin-top: 2px; font-size: 10.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .a-row-stat { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #93a0b2; }
+  .tag {
+    height: 18px;
+    padding: 0 7px;
+    border-radius: 9px;
+    font-size: 9.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+  }
+  .tag.live { color: #1f9e63; background: var(--green-soft); }
+  .tag.play { color: #d97a16; background: var(--orange-soft); }
+
+  .a-add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 13px 14px;
+    border-radius: 18px;
+    border: 1px dashed #cad6e8;
+    background: rgba(255, 255, 255, 0.55);
+    color: #6d7c93;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .a-add .plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    background: #eaf2ff;
+    color: #2f7dff;
+  }
+  .a-foot {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 9.5px;
+    letter-spacing: 1.4px;
+    color: #b4bfd0;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="a-hero">
+    <i class="star" style="left:26px;top:38px;width:2px;height:2px;opacity:.75"></i>
+    <i class="star" style="left:76px;top:112px;width:1.5px;height:1.5px;opacity:.5"></i>
+    <i class="star" style="left:320px;top:74px;width:2px;height:2px;opacity:.65"></i>
+    <i class="star" style="left:352px;top:196px;width:1.5px;height:1.5px;opacity:.45"></i>
+    <i class="star" style="left:300px;top:286px;width:2px;height:2px;opacity:.5"></i>
+    <i class="star" style="left:44px;top:268px;width:1.5px;height:1.5px;opacity:.4"></i>
+    <i class="star" style="left:196px;top:20px;width:1.5px;height:1.5px;opacity:.55"></i>
+    <i class="star" style="left:126px;top:322px;width:1.5px;height:1.5px;opacity:.3"></i>
+
+    <div class="a-head">
+      <div>
+        <div class="a-kicker">MY HOME · 万物互联</div>
+        <div class="a-title">我的家</div>
+      </div>
+      <div class="a-badge"><i class="dot on"></i>2 台在线</div>
+    </div>
+
+    <div class="a-map">
+      <svg class="a-svg" viewBox="0 0 342 232" fill="none">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#8dc0ff" stop-opacity=".32"/>
+            <stop offset="1" stop-color="#8dc0ff" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="spoke" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#9ecbff" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#9ecbff" stop-opacity=".04"/>
+          </linearGradient>
+        </defs>
+        <circle cx="171" cy="115" r="126" fill="url(#coreGlow)"/>
+        <circle cx="171" cy="115" r="72" stroke="rgba(255,255,255,.15)" stroke-dasharray="3 6"/>
+        <circle cx="171" cy="115" r="112" stroke="rgba(255,255,255,.09)" stroke-dasharray="3 7"/>
+        <circle cx="171" cy="115" r="150" stroke="rgba(255,255,255,.05)" stroke-dasharray="2 8"/>
+        <line x1="171" y1="115" x2="209" y2="54" stroke="url(#spoke)" stroke-width="1.3"/>
+        <line x1="171" y1="115" x2="127" y2="172" stroke="url(#spoke)" stroke-width="1.3"/>
+        <line x1="171" y1="115" x2="278" y2="150" stroke="url(#spoke)" stroke-width="1"/>
+        <line x1="171" y1="115" x2="63" y2="84" stroke="url(#spoke)" stroke-width="1"/>
+        <circle cx="209" cy="54" r="3" fill="#9cc8ff" opacity=".75"/>
+        <circle cx="127" cy="172" r="3" fill="#ffc07a" opacity=".75"/>
+        <circle cx="278" cy="150" r="2.4" fill="#9cc8ff" opacity=".4"/>
+        <circle cx="63" cy="84" r="2.4" fill="#9cc8ff" opacity=".4"/>
+      </svg>
+
+      <div class="nd center" style="left:140px;top:84px">
+        <div class="nd-ic">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M4 10.4 12 4l8 6.4V19a1.6 1.6 0 0 1-1.6 1.6h-3.2v-6.2H8.8v6.2H5.6A1.6 1.6 0 0 1 4 19z"/></svg>
+        </div>
+      </div>
+
+      <div class="nd fan" style="left:186px;top:31px">
+        <div class="nd-ic">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+          </svg>
+        </div>
+        <i class="nd-dot"></i>
+        <span class="nd-label up">风扇 · 运行中</span>
+      </div>
+
+      <div class="nd story" style="left:104px;top:149px">
+        <div class="nd-ic">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+            <path d="M12 6.4v14.1"/>
+          </svg>
+        </div>
+        <i class="nd-dot"></i>
+        <span class="nd-label">故事机 · 播放中</span>
+      </div>
+
+      <div class="nd empty" style="left:259px;top:131px">
+        <div class="nd-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+        <span class="nd-label">待接入</span>
+      </div>
+
+      <div class="nd empty" style="left:44px;top:65px">
+        <div class="nd-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+        <span class="nd-label">待接入</span>
+      </div>
+    </div>
+
+    <div class="a-env">
+      <span>室内 24°</span><i></i><span>湿度 55%</span><i></i><span>空气 优</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><span class="sec-title">快捷场景</span><span class="sec-sub">一键切换全屋</span></div>
+      <span class="sec-more">编辑</span>
+    </div>
+    <div class="a-scenes">
+      <div class="a-scene sc-sleep">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M20 14.3A8.4 8.4 0 0 1 9.7 4 8.5 8.5 0 1 0 20 14.3z"/></svg></div>
+        <div class="sc-name">睡眠</div>
+        <div class="sc-sub">故事机 21:00</div>
+      </div>
+      <div class="a-scene sc-cool">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8.5h10.5a2.8 2.8 0 1 0-2.8-2.8"/><path d="M3 12.5h14a2.8 2.8 0 1 1-2.8 2.8"/><path d="M3 16.5h6.5"/></svg></div>
+        <div class="sc-name">清凉风</div>
+        <div class="sc-sub">风扇 2 档</div>
+      </div>
+      <div class="a-scene sc-story">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="18" r="2.4"/><circle cx="17.5" cy="15.6" r="2.4"/><path d="M9.4 18V7.4L19.9 5.6v10"/></svg></div>
+        <div class="sc-name">听故事</div>
+        <div class="sc-sub">继续上次</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><span class="sec-title">我的设备</span><span class="sec-sub">2 台已连接</span></div>
+      <span class="sec-more">全部 ›</span>
+    </div>
+    <div class="a-rows">
+      <div class="a-row">
+        <div class="g blue">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+          </svg>
+        </div>
+        <div class="a-row-id">
+          <div class="a-row-name">风扇 <span class="tag live">运行中</span></div>
+          <div class="a-row-sub">2 档 · ESC 模式 · 客厅</div>
+        </div>
+        <div class="a-row-stat"><i class="dot on"></i>在线</div>
+      </div>
+      <div class="a-row">
+        <div class="g orange">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+            <path d="M12 6.4v14.1"/>
+          </svg>
+        </div>
+        <div class="a-row-id">
+          <div class="a-row-name">故事机 <span class="tag play">播放中</span></div>
+          <div class="a-row-sub">《小熊的冬天》 · 03:12</div>
+        </div>
+        <div class="a-row-stat"><i class="dot on"></i>在线</div>
+      </div>
+    </div>
+
+    <div class="a-add">
+      <span class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+      接入新设备
+      <span style="margin-left:auto;font-size:10px;color:#a8b2c1">2 台待接入</span>
+    </div>
+  </div>
+
+  <div class="a-foot">SC CONTROL · 万物互联</div>
+</div>
+</body>
+</html>

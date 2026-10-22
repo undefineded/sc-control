@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>方案 B · 控制台矩阵</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  .b-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 0;
+  }
+  .b-date { font-size: 10px; font-weight: 600; letter-spacing: 0.6px; color: var(--faint); }
+  .b-title { margin-top: 4px; font-size: 23px; font-weight: 700; letter-spacing: 0.3px; }
+  .b-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: linear-gradient(150deg, #dfe9ff, #eef4ff);
+    color: #2f6ad8;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 6px 16px rgba(47, 106, 216, 0.14);
+  }
+  .b-avatar .dot { position: absolute; right: -1px; bottom: -1px; width: 9px; height: 9px; border: 2px solid #f4f6fb; }
+
+  /* environment strip */
+  .b-env {
+    display: flex;
+    align-items: stretch;
+    margin: 16px 20px 0;
+    padding: 12px 0;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: var(--sh);
+  }
+  .b-env-cell { flex: 1; padding: 0 14px; position: relative; }
+  .b-env-cell + .b-env-cell::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 22px;
+    background: var(--line);
+  }
+  .b-env-num { font-size: 19px; font-weight: 700; letter-spacing: -0.2px; line-height: 1.1; }
+  .b-env-num small { font-size: 11px; font-weight: 600; color: var(--faint); margin-left: 1px; }
+  .b-env-label { margin-top: 3px; font-size: 9.5px; color: var(--sub); }
+
+  /* scene chips */
+  .b-scenes { display: flex; gap: 8px; padding: 0 20px; margin-top: 14px; }
+  .b-scene {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 4px 8px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(22, 40, 72, 0.05);
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #4e5d74;
+  }
+  .b-scene .ic { width: 17px; height: 17px; }
+  .b-scene:nth-child(1) .ic { color: #6152ea; }
+  .b-scene:nth-child(2) .ic { color: #2f7dff; }
+  .b-scene:nth-child(3) .ic { color: #e8830f; }
+  .b-scene:nth-child(4) .ic { color: #12a08f; }
+
+  /* running card */
+  .b-run { margin: 18px 20px 0; padding: 4px 14px 6px; background: #fff; border-radius: 20px; box-shadow: var(--sh); }
+  .b-run-head { display: flex; align-items: center; gap: 6px; padding: 10px 2px 6px; }
+  .b-run-title { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .b-run-count {
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: #eef3fc;
+    color: #5d7395;
+    font-size: 9.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .b-live { display: flex; align-items: center; gap: 11px; padding: 8px 2px 10px; }
+  .b-live-body { flex: 1; min-width: 0; }
+  .b-live-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+  .b-live-sub { margin-top: 2px; font-size: 10.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .b-bar { height: 3px; margin-top: 8px; border-radius: 2px; background: #eef2f8; overflow: hidden; }
+  .b-bar i { display: block; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #ffb467, #ff9f43); }
+  .b-run .hr { margin: 0 -14px; }
+  .b-speed { display: flex; gap: 3px; }
+  .b-speed i { width: 5px; height: 12px; border-radius: 2px; background: #e6ebf3; }
+  .b-speed i.on { background: #3b8eff; }
+
+  /* device grid */
+  .b-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 20px; margin-top: 18px; }
+  .b-grid .tile { min-height: 118px; }
+  .b-add {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 118px;
+    padding: 13px;
+    border-radius: 18px;
+    border: 1px dashed #c9d6e8;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .b-add .plus { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 10px; background: #eaf2ff; color: #2f7dff; }
+  .b-add-name { font-size: 12.5px; font-weight: 600; color: #5f7590; }
+  .b-add-sub { margin-top: 2px; font-size: 10px; color: #a8b2c1; }
+
+  /* log */
+  .b-log { margin: 16px 20px 0; padding: 12px 14px; background: rgba(255, 255, 255, 0.6); border-radius: 16px; border: 1px solid rgba(22, 40, 72, 0.04); }
+  .b-log-row { display: flex; align-items: center; gap: 9px; font-size: 10.5px; color: #6c7b91; }
+  .b-log-row + .b-log-row { margin-top: 8px; }
+  .b-log-row b { font-weight: 600; color: #45536a; }
+  .b-log-time { margin-left: auto; color: #b0bac8; font-size: 9.5px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="b-head">
+    <div>
+      <div class="b-date">10月22日 周三 · 2 台在线</div>
+      <div class="b-title">我的家</div>
+    </div>
+    <div class="b-avatar">林<i class="dot on"></i></div>
+  </div>
+
+  <div class="b-env">
+    <div class="b-env-cell">
+      <div class="b-env-num">24<small>°C</small></div>
+      <div class="b-env-label">室内温度</div>
+    </div>
+    <div class="b-env-cell">
+      <div class="b-env-num">55<small>%</small></div>
+      <div class="b-env-label">相对湿度</div>
+    </div>
+    <div class="b-env-cell">
+      <div class="b-env-num">优<small></small></div>
+      <div class="b-env-label">空气质量</div>
+    </div>
+  </div>
+
+  <div class="b-scenes">
+    <div class="b-scene"><svg class="ic" viewBox="0 0 24 24"><path d="M20 14.3A8.4 8.4 0 0 1 9.7 4 8.5 8.5 0 1 0 20 14.3z"/></svg>睡眠</div>
+    <div class="b-scene"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8.5h10.5a2.8 2.8 0 1 0-2.8-2.8"/><path d="M3 12.5h14a2.8 2.8 0 1 1-2.8 2.8"/><path d="M3 16.5h6.5"/></svg>清凉</div>
+    <div class="b-scene"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="18" r="2.4"/><circle cx="17.5" cy="15.6" r="2.4"/><path d="M9.4 18V7.4L19.9 5.6v10"/></svg>故事</div>
+    <div class="b-scene"><svg class="ic" viewBox="0 0 24 24"><path d="M4 10.4 12 4l8 6.4V19a1.6 1.6 0 0 1-1.6 1.6h-3.2v-6.2H8.8v6.2H5.6A1.6 1.6 0 0 1 4 19z"/></svg>回家</div>
+  </div>
+
+  <div class="b-run">
+    <div class="b-run-head">
+      <span class="b-run-title">正在运行</span>
+      <span class="b-run-count">2</span>
+      <span style="margin-left:auto;font-size:10px;color:#a8b2c1">全部暂停</span>
+    </div>
+
+    <div class="b-live">
+      <div class="g orange">
+        <svg class="ic" viewBox="0 0 24 24">
+          <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+          <path d="M12 6.4v14.1"/>
+        </svg>
+      </div>
+      <div class="b-live-body">
+        <div class="b-live-name">故事机 <span class="tag play" style="height:17px;padding:0 6px;border-radius:8px;font-size:9px">播放中</span></div>
+        <div class="b-live-sub">小熊的冬天 · 03:12 / 12:40 · 儿童房</div>
+        <div class="b-bar"><i style="width:26%"></i></div>
+      </div>
+      <button class="icon-btn primary">
+        <svg class="ic sm" viewBox="0 0 24 24"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>
+      </button>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="b-live">
+      <div class="g blue">
+        <svg class="ic" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="1.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+        </svg>
+      </div>
+      <div class="b-live-body">
+        <div class="b-live-name">风扇 <span style="font-size:11px;font-weight:500;color:var(--sub)">2 档 · ESC</span></div>
+        <div class="b-live-sub">客厅 · 已运行 25 分钟</div>
+        <div class="b-speed"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="switch on"></div>
+    </div>
+  </div>
+
+  <div class="b-grid">
+    <div class="tile on">
+      <div class="tile-top">
+        <div class="g blue">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+          </svg>
+        </div>
+        <i class="dot on"></i>
+      </div>
+      <div class="tile-id">
+        <div class="tile-name">风扇</div>
+        <div class="tile-state">运行中 · 2 档</div>
+      </div>
+      <div class="tile-foot">
+        <span class="tile-meta">客厅</span>
+        <div class="switch on"></div>
+      </div>
+    </div>
+
+    <div class="tile on">
+      <div class="tile-top">
+        <div class="g orange">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+            <path d="M12 6.4v14.1"/>
+          </svg>
+        </div>
+        <i class="dot on"></i>
+      </div>
+      <div class="tile-id">
+        <div class="tile-name">故事机</div>
+        <div class="tile-state">播放中 · 03:12</div>
+      </div>
+      <div class="tile-foot">
+        <span class="tile-meta">儿童房</span>
+        <button class="icon-btn" style="width:26px;height:26px">
+          <svg class="ic xs" viewBox="0 0 24 24"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-top">
+        <div class="g gray">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 2h5.2c0-.8.3-1.5.9-2A6 6 0 0 0 12 3z"/></svg>
+        </div>
+        <span style="font-size:9px;color:#b6c0ce">即将支持</span>
+      </div>
+      <div class="tile-id">
+        <div class="tile-name" style="color:#8794a6">智能灯</div>
+        <div class="tile-state">接入后自动出现在这里</div>
+      </div>
+      <div class="tile-foot">
+        <span class="tile-meta">更多品类</span>
+      </div>
+    </div>
+
+    <div class="b-add">
+      <div class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+      <div>
+        <div class="b-add-name">接入新设备</div>
+        <div class="b-add-sub">蓝牙 / Wi-Fi 自动发现</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-log">
+    <div class="b-log-row"><i class="dot" style="background:#ffb467"></i><span>故事机播放 <b>《小熊的冬天》</b></span><span class="b-log-time">08:12</span></div>
+    <div class="b-log-row"><i class="dot" style="background:#9fb3d4"></i><span>风扇执行 <b>「清凉风」</b> 场景</span><span class="b-log-time">07:30</span></div>
+  </div>
+</div>
+</body>
+</html>

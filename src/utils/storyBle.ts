@@ -183,6 +183,7 @@ class StoryBleManager {
   private ensureConnListener() {
     if (this.connListenerReady) return
     this.connListenerReady = true
+    /* 不调用 offBLEConnectionStateChange: 那个 API 会清掉风扇那边的监听 */
     Taro.onBLEConnectionStateChange((res) => {
       if (res.deviceId === this.deviceId && !res.connected) {
         this.connected = false
@@ -211,7 +212,6 @@ class StoryBleManager {
      这种状态只能关掉再打开适配器才能恢复（风扇页每次连接都做了这件事，故事页以前没有），
      否则重试多少次都一样。 */
   async resetAdapter(): Promise<boolean> {
-    try { Taro.offBLEConnectionStateChange() } catch {}
     try { await Taro.closeBluetoothAdapter() } catch {}
     this.adapterReady = false
     this.connListenerReady = false

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>扩展态 · 10 台设备</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="devices.css">
+<style>
+  .e1-sub { display: flex; align-items: center; gap: 6px; }
+  .e1-sec-head { display: flex; align-items: baseline; justify-content: space-between; margin: 2px 2px 8px; }
+  .e1-sec-title { font-size: 12px; font-weight: 600; color: #4d5b72; }
+  .e1-sec-more { font-size: 9.5px; color: #a2adbd; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="dp-top">
+    <div class="dp-back"><svg class="ic sm" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></div>
+    <div class="dp-head">
+      <div class="dp-title">全部设备</div>
+      <div class="dp-sub">10 台 · 3 个房间 · 7 台在线</div>
+    </div>
+    <div class="dp-add-btn"><svg class="ic sm" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+  </div>
+
+  <div class="dp-chips">
+    <span class="chip active">全部 <span class="chip-num" style="opacity:.5">10</span></span>
+    <span class="chip">客厅 <span class="chip-num">4</span></span>
+    <span class="chip">儿童房 <span class="chip-num">3</span></span>
+    <span class="chip">书房 <span class="chip-num">3</span></span>
+  </div>
+
+  <div class="dp-body">
+    <div style="margin-top:14px">
+      <div class="e1-sec-head">
+        <span class="e1-sec-title">正在使用 · 3</span>
+        <span class="e1-sec-more">左右滑动 ›</span>
+      </div>
+      <div class="dp-rail">
+        <div class="dp-railcard" style="--rc:#ff9f43">
+          <div class="rc-top">
+            <div class="g orange" style="width:24px;height:24px;border-radius:8px"><svg class="ic" style="width:13px;height:13px" viewBox="0 0 24 24"><path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/><path d="M12 6.4v14.1"/></svg></div>
+            <span class="rc-name">故事机</span>
+            <i class="dot on" style="margin-left:auto"></i>
+          </div>
+          <div class="rc-sub">播放中 · 03:12 / 12:40</div>
+          <div class="rc-bar"><i style="width:26%"></i></div>
+        </div>
+
+        <div class="dp-railcard" style="--rc:#f2b35c">
+          <div class="rc-top">
+            <div class="g" style="width:24px;height:24px;border-radius:8px;background:#fff4e6;color:#e8830f"><svg class="ic" style="width:13px;height:13px" viewBox="0 0 24 24"><path d="M8 3h8l3 8H5z"/><path d="M12 11v9"/><path d="M8.5 20.5h7"/></svg></div>
+            <span class="rc-name">落地灯</span>
+            <i class="dot on" style="margin-left:auto"></i>
+          </div>
+          <div class="rc-sub">暖光 · 60%</div>
+          <div class="rc-bar"><i style="width:60%"></i></div>
+        </div>
+
+        <div class="dp-railcard" style="--rc:#12b3a8">
+          <div class="rc-top">
+            <div class="g teal" style="width:24px;height:24px;border-radius:8px"><svg class="ic" style="width:13px;height:13px" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="4"/><circle cx="12" cy="9.5" r="2.4"/><path d="M8.5 16h7"/></svg></div>
+            <span class="rc-name">净化器</span>
+            <i class="dot on" style="margin-left:auto"></i>
+          </div>
+          <div class="rc-sub">自动 · PM2.5 32</div>
+          <div class="rc-bar"><i style="width:42%"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-room" style="margin-top:16px">
+      <div class="dp-room-head">
+        <span class="dp-room-name">客厅</span>
+        <span class="dp-room-meta">4 台 · 3 台在线</span>
+        <span class="dp-room-act"><i class="dot on"></i>24.2°C</span>
+      </div>
+      <div class="dp-grid">
+        <div class="tile on">
+          <div class="tile-top">
+            <div class="g blue">
+              <svg class="ic" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="1.9"/>
+                <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+                <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+                <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+              </svg>
+            </div>
+            <i class="dot on"></i>
+          </div>
+          <div class="tile-id">
+            <div class="tile-name">风扇</div>
+            <div class="tile-state">运行中 · <strong>2 档</strong></div>
+          </div>
+          <div class="tile-foot">
+            <span class="tile-meta">ESC · 25 分钟</span>
+            <div class="switch on"></div>
+          </div>
+        </div>
+
+        <div class="tile on">
+          <div class="tile-top">
+            <div class="g orange">
+              <svg class="ic" viewBox="0 0 24 24"><path d="M8 3h8l3 8H5z"/><path d="M12 11v9"/><path d="M8.5 20.5h7"/></svg>
+            </div>
+            <i class="dot on"></i>
+          </div>
+          <div class="tile-id">
+            <div class="tile-name">落地灯</div>
+            <div class="tile-state">暖光 · <strong>60%</strong></div>
+          </div>
+          <div class="tile-foot">
+            <span class="tile-meta">色温 2700K</span>
+            <div class="switch on"></div>
+          </div>
+        </div>
+
+        <div class="tile on">
+          <div class="tile-top">
+            <div class="g teal">
+              <svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="4"/><circle cx="12" cy="9.5" r="2.4"/><path d="M8.5 16h7"/></svg>
+            </div>
+            <i class="dot on"></i>
+          </div>
+          <div class="tile-id">
+            <div class="tile-name">空气净化器</div>
+            <div class="tile-state">自动 · <strong>PM2.5 32</strong></div>
+          </div>
+          <div class="tile-foot">
+            <span class="tile-meta">滤芯 82%</span>
+            <div class="switch on"></div>
+          </div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-top">
+            <div class="g gray">
+              <svg class="ic" viewBox="0 0 24 24"><path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/></svg>
+            </div>
+            <i class="dot"></i>
+          </div>
+          <div class="tile-id">
+            <div class="tile-name" style="color:#77839a">智能插座</div>
+            <div class="tile-state">已关闭 · 0 W</div>
+          </div>
+          <div class="tile-foot">
+            <span class="tile-meta">离线</span>
+            <div class="switch"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-collapsed">
+      <div class="g orange" style="width:30px;height:30px;border-radius:10px"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/><path d="M12 6.4v14.1"/></svg></div>
+      <div>
+        <div class="dp-room-name" style="font-size:12.5px">儿童房</div>
+        <div class="dp-room-meta" style="margin-top:1px">3 台 · 2 台在线 · 故事机播放中</div>
+      </div>
+      <div class="dp-mini">
+        <div class="g purple"><svg class="ic" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 2h5.2c0-.8.3-1.5.9-2A6 6 0 0 0 12 3z"/></svg></div>
+        <div class="g teal"><svg class="ic" viewBox="0 0 24 24"><path d="M10 13.5V6a2 2 0 1 1 4 0v7.5a4 4 0 1 1-4 0z"/></svg></div>
+      </div>
+      <span class="dp-chev">›</span>
+    </div>
+
+    <div class="dp-collapsed">
+      <div class="g blue" style="width:30px;height:30px;border-radius:10px"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M8 3h8l3 8H5z"/><path d="M12 11v9"/><path d="M8.5 20.5h7"/></svg></div>
+      <div>
+        <div class="dp-room-name" style="font-size:12.5px">书房</div>
+        <div class="dp-room-meta" style="margin-top:1px">3 台 · 2 台在线 · 台灯 / 加湿器 / 摄像头</div>
+      </div>
+      <div class="dp-mini">
+        <div class="g purple"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3.5c3.5 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2.5-6 6-10z"/></svg></div>
+        <div class="g gray"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8.5 6.5 6h11L21 8.5V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.2"/></svg></div>
+      </div>
+      <span class="dp-chev">›</span>
+    </div>
+
+    <div class="dp-add-row">
+      <span class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+      添加新设备
+      <span>蓝牙自动发现</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

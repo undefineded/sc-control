@@ -1,6 +1,6 @@
 export default definePageConfig({
-  navigationBarTitleText: '设备中心',
-  navigationBarBackgroundColor: '#3b8eff',
-  navigationBarTextStyle: 'white',
-  backgroundColor: '#f5f7fb'
+  navigationBarTitleText: '我的设备',
+  navigationBarBackgroundColor: '#f4f6fb',
+  navigationBarTextStyle: 'black',
+  backgroundColor: '#f4f6fb'
 })

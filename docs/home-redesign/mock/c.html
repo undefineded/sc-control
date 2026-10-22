@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>方案 C · 空间流</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { background: #f4f6fb; }
+  .c-head {
+    position: relative;
+    padding: 18px 20px 26px;
+    background:
+      radial-gradient(120% 100% at 100% 0%, #fff3e2 0%, rgba(255, 243, 226, 0) 55%),
+      linear-gradient(180deg, #fdf9f4 0%, #f6f7fb 100%);
+  }
+  .c-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .c-kicker { font-size: 9.5px; font-weight: 700; letter-spacing: 2px; color: #b9a68f; }
+  .c-title { margin-top: 5px; font-size: 24px; font-weight: 700; letter-spacing: 0.3px; }
+  .c-sub { margin-top: 4px; font-size: 11px; color: #8b8f9c; }
+  .c-edit {
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 3px 12px rgba(120, 90, 50, 0.08);
+    font-size: 10.5px;
+    color: #7c7466;
+    display: inline-flex;
+    align-items: center;
+  }
+  .c-chips { display: flex; gap: 7px; margin-top: 14px; }
+  .c-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.78);
+    font-size: 10px;
+    color: #7d8496;
+  }
+  .c-chip b { font-weight: 600; color: #46536a; }
+  .c-chip .dot { width: 5px; height: 5px; }
+
+  /* rooms */
+  .c-rooms { padding: 0 16px; margin-top: -12px; }
+  .room {
+    position: relative;
+    margin-bottom: 12px;
+    padding: 14px 14px 12px 18px;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(40, 52, 78, 0.07);
+    overflow: hidden;
+  }
+  .room::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 20px;
+    bottom: 20px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--room, #3b8eff);
+    opacity: 0.85;
+  }
+  .room-head { display: flex; align-items: center; gap: 8px; }
+  .room-name { font-size: 15px; font-weight: 700; letter-spacing: 0.2px; }
+  .room-meta { font-size: 10px; color: #9aa4b4; }
+  .room-act {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 12px;
+    background: #f4f6fa;
+    font-size: 10px;
+    color: #7c8798;
+  }
+  .room-env { display: flex; gap: 12px; margin-top: 6px; font-size: 9.5px; color: #a5aebb; }
+
+  .r-dev { display: flex; align-items: center; gap: 11px; margin-top: 11px; padding-top: 11px; border-top: 1px solid #f2f4f8; }
+  .r-dev-id { flex: 1; min-width: 0; }
+  .r-dev-name { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }
+  .r-dev-sub { margin-top: 2px; font-size: 10px; color: #8f9aab; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tag {
+    height: 17px;
+    padding: 0 6px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+  }
+  .tag.live { color: #1f9e63; background: var(--green-soft); }
+  .tag.play { color: #d97a16; background: var(--orange-soft); }
+  .bar { height: 3px; margin-top: 7px; border-radius: 2px; background: #f0f3f8; overflow: hidden; }
+  .bar i { display: block; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #ffc27a, #ff9f43); }
+
+  .room-empty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px dashed #d9e0ea;
+    background: #fbfcfe;
+    font-size: 11px;
+    color: #8b96a6;
+  }
+  .room-empty .plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    background: #eef3fb;
+    color: #7c93b5;
+  }
+  .room.tone-blue { --room: #3b8eff; }
+  .room.tone-orange { --room: #ff9f43; }
+  .room.tone-empty { --room: #c3cddb; }
+
+  /* today */
+  .c-today {
+    margin: 16px 16px 0;
+    padding: 15px 16px;
+    border-radius: 22px;
+    background: linear-gradient(140deg, #fff8ee 0%, #fffdf9 55%, #f7faff 100%);
+    box-shadow: inset 0 0 0 1px rgba(219, 190, 150, 0.22);
+  }
+  .c-today-head { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #6a5c49; }
+  .c-today-head span { margin-left: auto; font-size: 10px; font-weight: 400; color: #a89c8c; }
+  .c-stats { display: flex; margin-top: 12px; }
+  .c-stat { flex: 1; }
+  .c-stat-num { font-size: 18px; font-weight: 700; color: #4d4132; letter-spacing: -0.2px; }
+  .c-stat-num small { font-size: 10px; font-weight: 500; color: #a2917d; margin-left: 2px; }
+  .c-stat-label { margin-top: 2px; font-size: 9.5px; color: #a89c8c; }
+
+  .c-foot { margin-top: 16px; text-align: center; font-size: 9.5px; letter-spacing: 1.4px; color: #bcc4d1; }
+
+  .room-add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 16px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    border: 1px dashed #d5dce6;
+    background: rgba(255, 255, 255, 0.55);
+    font-size: 11px;
+    color: #8794a6;
+  }
+  .room-add .plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: #f0f4fa;
+    color: #7c93b5;
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="c-head">
+    <div class="c-top">
+      <div>
+        <div class="c-kicker">MY HOME · 万物互联</div>
+        <div class="c-title">我的家</div>
+        <div class="c-sub">3 个房间 · 2 台设备在线</div>
+      </div>
+      <div class="c-edit">管理空间</div>
+    </div>
+    <div class="c-chips">
+      <div class="c-chip"><i class="dot on"></i><b>2</b> 在线</div>
+      <div class="c-chip">室内 <b>24°</b></div>
+      <div class="c-chip">今日陪伴 <b>32</b> 分钟</div>
+    </div>
+  </div>
+
+  <div class="c-rooms">
+    <div class="room tone-blue">
+      <div class="room-head">
+        <span class="room-name">客厅</span>
+        <span class="room-meta">1 台设备</span>
+        <span class="room-act">全部关闭</span>
+      </div>
+      <div class="room-env"><span>24.2°C</span><span>湿度 55%</span><span>空气 优</span></div>
+
+      <div class="r-dev" style="border-top:0;padding-top:0;margin-top:9px">
+        <div class="g blue">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+          </svg>
+        </div>
+        <div class="r-dev-id">
+          <div class="r-dev-name">风扇 <span class="tag live">运行中</span></div>
+          <div class="r-dev-sub">2 档 · ESC 模式 · 已运行 25 分钟</div>
+        </div>
+        <div class="switch on"></div>
+      </div>
+    </div>
+
+    <div class="room tone-orange">
+      <div class="room-head">
+        <span class="room-name">儿童房</span>
+        <span class="room-meta">1 台设备</span>
+        <span class="room-act">全部关闭</span>
+      </div>
+      <div class="room-env"><span>23.6°C</span><span>故事机使用中</span></div>
+
+      <div class="r-dev" style="border-top:0;padding-top:0;margin-top:9px">
+        <div class="g orange">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+            <path d="M12 6.4v14.1"/>
+          </svg>
+        </div>
+        <div class="r-dev-id">
+          <div class="r-dev-name">故事机 <span class="tag play">播放中</span></div>
+          <div class="r-dev-sub">小熊的冬天 · 03:12 / 12:40</div>
+          <div class="bar"><i style="width:26%"></i></div>
+        </div>
+        <button class="icon-btn primary" style="width:30px;height:30px">
+          <svg class="ic xs" viewBox="0 0 24 24"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="room tone-empty">
+      <div class="room-head">
+        <span class="room-name" style="color:#77839a">书房</span>
+        <span class="room-meta">暂无设备</span>
+      </div>
+      <div class="room-empty">
+        <span class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+        为书房接入第一台设备
+        <span style="margin-left:auto;font-size:9.5px;color:#b3bdcb">去添加 ›</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="room-add">
+    <span class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+    添加房间
+    <span style="margin-left:auto;font-size:9.5px;color:#b3bdcb">客厅 / 儿童房 / 书房</span>
+  </div>
+
+  <div class="c-today">
+    <div class="c-today-head">
+      今天的家
+      <span>10月22日</span>
+    </div>
+    <div class="c-stats">
+      <div class="c-stat">
+        <div class="c-stat-num">32<small>分钟</small></div>
+        <div class="c-stat-label">故事机陪伴</div>
+      </div>
+      <div class="c-stat">
+        <div class="c-stat-num">12<small>篇</small></div>
+        <div class="c-stat-label">收听内容</div>
+      </div>
+      <div class="c-stat">
+        <div class="c-stat-num">28<small>分钟</small></div>
+        <div class="c-stat-label">今日剩余时长</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-foot">SC CONTROL · 万物互联</div>
+</div>
+</body>
+</html>

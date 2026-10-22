@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>设备矩阵 · 已连接</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="matrix.css">
+</head>
+<body>
+<div class="screen">
+  <div class="m-head">
+    <div>
+      <div class="m-title">我的设备</div>
+      <div class="m-sub">已绑定 3 台 · 未连接</div>
+    </div>
+    <div class="m-bt"><i class="dot on"></i>蓝牙已开启</div>
+  </div>
+
+  <div class="conn idle">
+    <div class="conn-top">
+      <div class="conn-glyph">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 3.6l6.2 6.7-6.2 6.7V3.6z"/><path d="M12 20.4l-6.2-6.7 6.2-6.7"/></svg>
+      </div>
+      <div class="conn-id">
+        <div class="conn-name" style="color:#16202f">未连接<span class="conn-badge" style="background:#f1f4f9;color:#8794a6"><i style="background:#b9c3d2"></i>空闲</span></div>
+        <div class="conn-mac" style="color:#93a0b2">蓝牙已开启 · 已绑定 3 台</div>
+      </div>
+    </div>
+    <div class="conn-idle-desc" style="margin-top:12px">最近使用「风扇」· 上次连接 12 分钟前。选中一台连接后，这里会直接显示它的状态。</div>
+    <div class="conn-foot">
+      <span class="conn-time" style="color:#a8b2c1">同一时间只连一台</span>
+      <button class="conn-btn ghost">扫描附近</button>
+      <button class="conn-btn primary">连接风扇</button>
+    </div>
+  </div>
+
+  <div class="m-sec">
+    <div class="m-sec-head">
+      <span class="m-sec-title">设备<span>3 台</span></span>
+      <span class="m-sec-more">管理 ›</span>
+    </div>
+
+    <div class="m-grid">
+      <div class="mtile">
+        <div class="mtile-top">
+          <div class="g blue">
+            <svg class="ic" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="1.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+            </svg>
+          </div>
+          <span class="mtile-tag off">未连接</span>
+        </div>
+        <div>
+          <div class="mtile-name">风扇</div>
+          <div class="mtile-state">上次运行 · 2 档</div>
+        </div>
+        <div class="mtile-foot">
+          <span class="mtile-meta">上次连接 12 分钟前</span>
+          <span class="pill soft">连接</span>
+        </div>
+      </div>
+
+      <div class="mtile">
+        <div class="mtile-top">
+          <div class="g orange">
+            <svg class="ic" viewBox="0 0 24 24">
+              <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+              <path d="M12 6.4v14.1"/>
+            </svg>
+          </div>
+          <span class="mtile-tag off">未连接</span>
+        </div>
+        <div>
+          <div class="mtile-name">故事机</div>
+          <div class="mtile-state">上次播放 · 小熊的冬天</div>
+        </div>
+        <div class="mtile-foot">
+          <span class="mtile-meta">上次连接 2 天前</span>
+          <span class="pill soft">连接</span>
+        </div>
+      </div>
+
+      <div class="mtile">
+        <div class="mtile-top">
+          <div class="g blue">
+            <svg class="ic" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="1.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+            </svg>
+          </div>
+          <span class="mtile-tag off">未连接</span>
+        </div>
+        <div>
+          <div class="mtile-name">风扇 2</div>
+          <div class="mtile-state">上次运行 · 1 档</div>
+        </div>
+        <div class="mtile-foot">
+          <span class="mtile-meta">上次连接 5 天前</span>
+          <span class="pill soft">连接</span>
+        </div>
+      </div>
+
+      <div class="m-add" style="grid-column:auto;height:auto;min-height:116px;flex-direction:column;justify-content:center;gap:8px;padding:12px">
+        <span class="plus"><svg class="ic xs" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+        <span style="font-size:11px">添加设备</span>
+        <span style="margin:0;font-size:9px;color:#a8b2c1">蓝牙扫描</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="near">
+    <div class="near-head">
+      <i class="dot warn"></i>附近设备
+      <span class="count">2 台</span>
+      <span class="near-scan">重新扫描</span>
+    </div>
+    <div class="near-row">
+      <div class="g blue" style="width:30px;height:30px;border-radius:9px">
+        <svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="1.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+        </svg>
+      </div>
+      <div class="near-id">
+        <div class="near-name">SC-FAN-03</div>
+        <div class="near-mac">蓝牙 · 未绑定</div>
+      </div>
+      <span class="near-rssi">-62 dBm</span>
+      <span class="pill soft" style="margin-left:8px">接入</span>
+    </div>
+    <div class="near-row">
+      <div class="g orange" style="width:30px;height:30px;border-radius:9px">
+        <svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24">
+          <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+          <path d="M12 6.4v14.1"/>
+        </svg>
+      </div>
+      <div class="near-id">
+        <div class="near-name">STORY-04</div>
+        <div class="near-mac">蓝牙 · 未绑定</div>
+      </div>
+      <span class="near-rssi">-74 dBm</span>
+      <span class="pill soft" style="margin-left:8px">接入</span>
+    </div>
+  </div>
+
+  <div class="m-tip">
+    <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+    <span>蓝牙同一时间只能连接一台设备；切换连接会先断开当前设备，设备保持原有运行状态。</span>
+  </div>
+</div>
+</body>
+</html>

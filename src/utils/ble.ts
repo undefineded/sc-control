@@ -25,13 +25,55 @@ class BleManager {
   private connectedDeviceId: string = ''
   private isScanning: boolean = false
   private statusCallback: ((status: BleStatus) => void) | null = null
+  private adapterReady: boolean = false
+  private lastStatus: BleStatus | null = null
+  private connListenerBound: boolean = false
+
+  /* 连上以后设备被关机/走远, 微信不会主动改 connectedDeviceId, 这里补一个监听 */
+  private bindConnListener() {
+    if (this.connListenerBound) return
+    this.connListenerBound = true
+    Taro.onBLEConnectionStateChange((res) => {
+      if (res.deviceId === this.connectedDeviceId && !res.connected) {
+        this.connectedDeviceId = ''
+        this.lastStatus = null
+        const device = this.discoveredDevices.get(res.deviceId)
+        if (device) device.connected = false
+      }
+    })
+  }
 
   async initBluetooth(): Promise<boolean> {
     try {
       try { await Taro.closeBluetoothAdapter() } catch {}
+      this.adapterReady = false
+      this.connListenerBound = false
       await Taro.openBluetoothAdapter()
+      this.adapterReady = true
+      this.bindConnListener()
       return true
     } catch (error) {
+      console.error('蓝牙初始化失败:', error)
+      Taro.showToast({ title: '请开启蓝牙', icon: 'none' })
+      return false
+    }
+  }
+
+  /* 扫描不应该重置适配器: 风扇连接本身就会 close/open 一次, 再重置会把故事机等已建立的链路一起断掉 */
+  async ensureAdapter(): Promise<boolean> {
+    if (this.adapterReady) return true
+    try {
+      await Taro.openBluetoothAdapter()
+      this.adapterReady = true
+      this.bindConnListener()
+      return true
+    } catch (error: any) {
+      /* 适配器已被别的模块打开时, 微信会报 already opened, 视为成功 */
+      const message = String((error && (error.errMsg || error.message)) || '')
+      if (message.indexOf('already') !== -1 || (error && error.errCode === 10010)) {
+        this.adapterReady = true
+        return true
+      }
       console.error('蓝牙初始化失败:', error)
       Taro.showToast({ title: '请开启蓝牙', icon: 'none' })
       return false
@@ -42,12 +84,13 @@ class BleManager {
     if (this.isScanning) return
 
     try {
-      const success = await this.initBluetooth()
+      const success = await this.ensureAdapter()
       if (!success) return
 
       this.discoveredDevices.clear()
       this.isScanning = true
 
+      Taro.offBluetoothDeviceFound()
       Taro.onBluetoothDeviceFound((res) => {
         res.devices.forEach(device => {
           if (device.name && device.name.length > 0) {
@@ -279,9 +322,12 @@ class BleManager {
       }
       if (targetId === this.connectedDeviceId) {
         this.connectedDeviceId = ''
+        this.lastStatus = null
       }
     } catch (error) {
       console.error('断开连接失败:', error)
+      this.connectedDeviceId = ''
+      this.lastStatus = null
     }
   }
 
@@ -336,6 +382,7 @@ class BleManager {
       const status = this.parseStatusData(data)
       if (status) {
         console.log('解析成功:', JSON.stringify(status))
+        this.lastStatus = status
         if (this.statusCallback) {
           this.statusCallback(status)
         } else {
@@ -464,6 +511,14 @@ class BleManager {
 
   isConnected(): boolean {
     return this.connectedDeviceId !== ''
+  }
+
+  isScanningNow(): boolean {
+    return this.isScanning
+  }
+
+  getLastStatus(): BleStatus | null {
+    return this.lastStatus
   }
 
   getConnectedDeviceId(): string {

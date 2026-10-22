@@ -1,0 +1,259 @@
+/* ============================================================
+   Home redesign · design tokens + shared components
+   Canvas: 390 x 844 (iPhone 14 logical px). 1px ≈ 1.92rpx
+   ============================================================ */
+:root {
+  --ink: #16202f;
+  --ink-2: #3d4a5e;
+  --sub: #7b8798;
+  --faint: #a8b2c1;
+
+  --line: #eaeef5;
+  --bg: #f4f6fb;
+  --bg-2: #eef2f9;
+  --card: #ffffff;
+
+  --blue: #3b8eff;
+  --blue-deep: #1f6bff;
+  --blue-soft: #eaf2ff;
+  --navy: #0d1c38;
+
+  --orange: #ff9f43;
+  --orange-deep: #e8830f;
+  --orange-soft: #fff4e6;
+
+  --green: #1fae6d;
+  --green-soft: #e7f8ef;
+
+  --purple: #7b6cf6;
+  --purple-soft: #efedff;
+
+  --teal: #12b3a8;
+  --teal-soft: #e4f8f6;
+
+  --red: #e85a5a;
+  --red-soft: #fdecec;
+
+  --r-sm: 12px;
+  --r: 16px;
+  --r-lg: 20px;
+  --r-xl: 26px;
+
+  --sh: 0 6px 22px rgba(22, 40, 72, 0.07);
+  --sh-lg: 0 14px 40px rgba(22, 40, 72, 0.1);
+}
+
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html, body { margin: 0; padding: 0; }
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+}
+body {
+  width: 390px;
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.screen {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ---------- icon base (mock uses inline SVG; prod uses iconfont) ---------- */
+.ic {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ic.sm { width: 15px; height: 15px; }
+.ic.xs { width: 12px; height: 12px; stroke-width: 2; }
+
+/* ---------- layout ---------- */
+.sec { padding: 0 20px; margin-top: 22px; }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 11px;
+  padding: 0 2px;
+}
+.sec-title { font-size: 15px; font-weight: 700; letter-spacing: 0.1px; }
+.sec-sub { margin-left: 6px; font-size: 11px; font-weight: 400; color: var(--sub); }
+.sec-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11px;
+  color: var(--sub);
+}
+.row { display: flex; align-items: center; }
+.gap8 { gap: 8px; }
+.gap10 { gap: 10px; }
+.gap12 { gap: 12px; }
+
+/* ---------- surfaces ---------- */
+.card { background: var(--card); border-radius: var(--r-lg); box-shadow: var(--sh); }
+.card-flat { background: var(--card); border-radius: var(--r-lg); }
+
+/* ---------- glyph chips ---------- */
+.g {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+}
+.g .ic { width: 20px; height: 20px; }
+.g.blue { background: var(--blue-soft); color: #2f7dff; }
+.g.orange { background: var(--orange-soft); color: var(--orange-deep); }
+.g.purple { background: var(--purple-soft); color: var(--purple); }
+.g.teal { background: var(--teal-soft); color: var(--teal); }
+.g.green { background: var(--green-soft); color: var(--green); }
+.g.gray { background: #f0f3f8; color: #93a0b2; }
+
+/* ---------- status ---------- */
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #c9d3e1; flex: 0 0 auto; }
+.dot.on { background: #2ec27e; box-shadow: 0 0 0 3px rgba(46, 194, 126, 0.13); }
+.dot.warn { background: #f0a92b; }
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 15px;
+  background: #fff;
+  color: #61708a;
+  font-size: 11.5px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(22, 40, 72, 0.04);
+  white-space: nowrap;
+}
+.chip.active {
+  background: #16202f;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(22, 32, 47, 0.22);
+}
+.chip-num { opacity: 0.55; font-size: 10.5px; margin-left: 1px; }
+
+/* ---------- device tile (grid) ---------- */
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 13px 13px 12px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+.tile.on { box-shadow: 0 10px 26px rgba(47, 125, 255, 0.14), inset 0 0 0 1px #dbe8ff; }
+.tile-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.tile-id { min-width: 0; }
+.tile-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-state {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-state strong { color: var(--blue-deep); font-weight: 600; }
+.tile-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.tile-meta { font-size: 10.5px; color: var(--faint); display: flex; align-items: center; gap: 4px; }
+
+/* quick action pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 13px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pill.ghost { background: #f1f4fa; color: #5f6e86; }
+.pill.soft { background: var(--blue-soft); color: var(--blue-deep); }
+.pill.solid { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(59, 142, 255, 0.32); }
+.pill.orange { background: var(--orange-soft); color: var(--orange-deep); }
+
+/* switch */
+.switch {
+  position: relative;
+  width: 40px;
+  height: 23px;
+  border-radius: 12px;
+  background: #dfe5ee;
+  flex: 0 0 auto;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(16, 30, 54, 0.2);
+}
+.switch.on { background: var(--blue); }
+.switch.on::after { left: 19px; }
+
+/* small round icon button */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f4fa;
+  color: #5b6a82;
+}
+.icon-btn.primary { background: var(--blue); color: #fff; box-shadow: 0 5px 14px rgba(59, 142, 255, 0.35); }
+
+/* section divider */
+.hr { height: 1px; background: var(--line); margin: 0 20px; }
+
+/* micro labels */
+.kicker {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--faint);
+}

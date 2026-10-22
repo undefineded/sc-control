@@ -1,0 +1,220 @@
+/* ============================================================
+   Device list page (recommended direction) · 390 x 844
+   Shared by d2.html (current state) and e1.html (12 devices)
+   ============================================================ */
+body { background: #f4f6fb; }
+
+.dp-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 16px 20px 0;
+}
+.dp-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(22, 40, 72, 0.07);
+  color: #4d5b72;
+  flex: 0 0 auto;
+}
+.dp-head { flex: 1; min-width: 0; }
+.dp-title { font-size: 19px; font-weight: 700; letter-spacing: 0.2px; line-height: 1.2; }
+.dp-sub { margin-top: 3px; font-size: 10px; color: #8b97a9; }
+.dp-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: #16202f;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(22, 32, 47, 0.24);
+  flex: 0 0 auto;
+}
+
+.dp-chips {
+  display: flex;
+  gap: 7px;
+  padding: 14px 20px 0;
+  overflow: hidden;
+}
+
+.dp-body { padding: 4px 20px 0; }
+
+.dp-room { margin-top: 18px; }
+.dp-room-head { display: flex; align-items: center; gap: 7px; margin-bottom: 10px; padding: 0 2px; }
+.dp-room-name { font-size: 13.5px; font-weight: 700; letter-spacing: 0.2px; }
+.dp-room-meta { font-size: 9.5px; color: #9aa5b6; }
+.dp-room-act { margin-left: auto; font-size: 10px; color: #8b97a9; display: flex; align-items: center; gap: 4px; }
+.dp-room-act .dot { width: 5px; height: 5px; }
+
+.dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dp-grid .tile { min-height: 114px; padding: 12px 12px 11px; }
+.dp-grid .g { width: 36px; height: 36px; border-radius: 11px; }
+
+.dp-add-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 114px;
+  border-radius: 18px;
+  border: 1px dashed #cfd9e7;
+  background: rgba(255, 255, 255, 0.5);
+  color: #8b97a9;
+  font-size: 10.5px;
+}
+.dp-add-tile .plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: #eaf2ff;
+  color: #2f7dff;
+}
+
+/* discovered devices */
+.dp-found {
+  margin-top: 20px;
+  padding: 13px 14px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--sh);
+}
+.dp-found-head { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #5b6679; }
+.dp-found-head .badge {
+  margin-left: auto;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: #fff4e6;
+  color: #d97a16;
+  font-size: 9px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+.dp-found-row { display: flex; align-items: center; gap: 10px; margin-top: 11px; }
+.dp-found-row + .dp-found-row { margin-top: 9px; }
+.dp-found-id { flex: 1; min-width: 0; }
+.dp-found-name { font-size: 12px; font-weight: 600; }
+.dp-found-mac { margin-top: 1px; font-size: 9.5px; color: #a3adbb; }
+.dp-found-rssi { font-size: 9.5px; color: #a3adbb; margin-right: 2px; }
+
+/* ecosystem */
+.dp-eco { margin-top: 20px; }
+.dp-eco-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 9px; padding: 0 2px; }
+.dp-eco-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.dp-eco-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 2px 10px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(22, 40, 72, 0.04);
+  color: #93a0b2;
+  font-size: 9.5px;
+}
+.dp-eco-item .ic { width: 17px; height: 17px; }
+.dp-wish {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: #eef2f9;
+  font-size: 10px;
+  color: #7d8aa0;
+}
+.dp-wish span { margin-left: auto; color: #a8b2c1; }
+
+.dp-manage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.66);
+  font-size: 11px;
+  color: #6b7a91;
+}
+.dp-manage .ic { width: 15px; height: 15px; color: #8fa0b8; }
+.dp-manage span { margin-left: auto; color: #aab4c2; }
+
+.dp-foot { margin-top: 16px; text-align: center; font-size: 9px; letter-spacing: 1.4px; color: #bcc5d3; }
+
+/* running rail (scaled state) */
+.dp-rail { display: flex; gap: 9px; margin-top: 4px; overflow: hidden; }
+.dp-railcard {
+  flex: 0 0 auto;
+  width: 148px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--sh);
+}
+.dp-railcard .rc-top { display: flex; align-items: center; gap: 6px; }
+.dp-railcard .rc-name { font-size: 11.5px; font-weight: 600; }
+.dp-railcard .rc-sub { margin-top: 6px; font-size: 9.5px; color: #93a0b2; }
+.dp-railcard .rc-bar { height: 3px; margin-top: 7px; border-radius: 2px; background: #f1f4f9; overflow: hidden; }
+.dp-railcard .rc-bar i { display: block; height: 3px; border-radius: 2px; background: var(--rc, #3b8eff); }
+
+/* collapsed room row (many devices) */
+.dp-collapsed {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 10px;
+  padding: 13px 14px;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: var(--sh);
+}
+.dp-mini { display: flex; align-items: center; margin-left: auto; }
+.dp-mini .g { width: 24px; height: 24px; border-radius: 8px; border: 2px solid #fff; }
+.dp-mini .g + .g { margin-left: -7px; }
+.dp-mini .g .ic { width: 12px; height: 12px; }
+.dp-chev { color: #c1cad8; font-size: 13px; margin-left: 2px; }
+
+/* full width add row */
+.dp-add-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 13px 14px;
+  border-radius: 17px;
+  border: 1px dashed #cfd9e7;
+  background: rgba(255, 255, 255, 0.55);
+  color: #6f7f96;
+  font-size: 11.5px;
+}
+.dp-add-row .plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  background: #eaf2ff;
+  color: #2f7dff;
+}
+.dp-add-row span:last-child { margin-left: auto; font-size: 9.5px; color: #a8b2c1; }
+.dp-railcard .rc-top { display: flex; align-items: center; gap: 6px; }
+.dp-railcard .rc-name { font-size: 11.5px; font-weight: 600; }
+.dp-railcard .rc-sub { margin-top: 6px; font-size: 9.5px; color: #93a0b2; }
+.dp-railcard .rc-bar { height: 3px; margin-top: 7px; border-radius: 2px; background: #f1f4f9; overflow: hidden; }
+.dp-railcard .rc-bar i { display: block; height: 3px; border-radius: 2px; background: var(--rc, #3b8eff); }

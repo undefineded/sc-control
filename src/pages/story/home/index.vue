@@ -333,6 +333,7 @@ import folderIcon from '../../../assets/story-icons/folder.png'
 import musicIcon from '../../../assets/story-icons/music.png'
 import nurseryRhymeIcon from '../../../assets/story-icons/nursery-rhyme.png'
 import storyIcon from '../../../assets/story-icons/story.png'
+import { releaseLinkFor } from '../../../utils/link'
 import './index.css'
 
 const emptyStatus = {
@@ -503,6 +504,8 @@ export default {
       connecting.value = true
       let ok = false
       try {
+        /* 蓝牙同一时间只保留一条链路: 若首页连着风扇, 先释放 */
+        await releaseLinkFor('story', deviceId)
         const info = await storyBle.connect(deviceId, name)
         connected.value = true
         hello.value = info

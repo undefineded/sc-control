@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>推荐方案 · 首页</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* ---------- hero ---------- */
+  .d-hero {
+    position: relative;
+    padding: 18px 24px 12px;
+    background:
+      radial-gradient(90% 70% at 50% 4%, #2f66b8 0%, rgba(47, 102, 184, 0) 62%),
+      linear-gradient(178deg, #12294e 0%, #0b1b36 62%, #0a1830 100%);
+    overflow: hidden;
+  }
+  .d-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(140, 190, 255, 0.25), transparent);
+  }
+  .d-star { position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%; background: #fff; opacity: 0.5; }
+
+  .d-head { position: relative; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; }
+  .d-kicker { font-size: 8.5px; font-weight: 700; letter-spacing: 2.4px; color: rgba(150, 190, 245, 0.6); }
+  .d-title { margin-top: 4px; font-size: 22px; font-weight: 700; letter-spacing: 0.4px; color: #fff; }
+  .d-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 25px;
+    padding: 0 10px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(150, 195, 255, 0.18);
+    font-size: 10px;
+    color: rgba(226, 239, 255, 0.9);
+  }
+
+  .d-map { position: relative; z-index: 2; width: 342px; height: 178px; margin: 2px auto 0; }
+  .d-map > svg { position: absolute; inset: 0; }
+
+  .dnd { position: absolute; width: 40px; }
+  .dnd-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 18px rgba(3, 12, 30, 0.4);
+  }
+  .dnd-box .ic { width: 18px; height: 18px; }
+  .dnd.fan .dnd-box { color: #a6ceff; }
+  .dnd.story .dnd-box { color: #ffc481; }
+  .dnd-dot {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34cf87;
+    border: 2px solid #0d2142;
+  }
+  .dnd-label {
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    line-height: 1;
+    color: rgba(200, 220, 250, 0.66);
+    white-space: nowrap;
+  }
+  .dnd-label.up { top: -13px; }
+
+  .dnd.center { left: 143px; top: 62px; width: 56px; }
+  .dnd.center .dnd-box {
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(155deg, #ffffff 0%, #d9e8ff 100%);
+    color: #2468d8;
+    box-shadow: 0 0 0 5px rgba(110, 165, 245, 0.1), 0 12px 30px rgba(3, 12, 30, 0.5);
+  }
+  .dnd.center .dnd-box .ic { width: 24px; height: 24px; }
+
+  .dnd.empty { width: 30px; }
+  .dnd.empty .dnd-box {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(150, 190, 245, 0.34);
+    box-shadow: none;
+    color: rgba(180, 210, 250, 0.5);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .dnd.empty .dnd-label { top: 34px; color: rgba(170, 200, 240, 0.44); }
+
+  .d-env {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    height: 20px;
+    font-size: 10px;
+    color: rgba(180, 205, 240, 0.72);
+  }
+  .d-env i { width: 1px; height: 8px; background: rgba(255, 255, 255, 0.14); }
+
+  /* ---------- overview (overlaps hero) ---------- */
+  .d-overview {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    margin: -22px 20px 0;
+    padding: 12px 0;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(20, 38, 70, 0.1);
+  }
+  .d-ov { flex: 1; position: relative; padding: 0 12px; }
+  .d-ov + .d-ov::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: var(--line);
+  }
+  .d-ov-num { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; line-height: 1.15; }
+  .d-ov-num small { font-size: 10px; font-weight: 500; color: var(--faint); margin-left: 1px; }
+  .d-ov-label { margin-top: 2px; font-size: 9.5px; color: var(--sub); }
+
+  /* ---------- scenes ---------- */
+  .d1 .sec { margin-top: 18px; }
+  .d-scenes { display: flex; gap: 9px; }
+  .d-scene {
+    position: relative;
+    flex: 1;
+    padding: 10px 10px 9px;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(22, 40, 72, 0.04);
+  }
+  .d-scene .sc-ic { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 9px; margin-bottom: 7px; }
+  .d-scene .sc-ic .ic { width: 14px; height: 14px; }
+  .d-scene .sc-name { font-size: 12.5px; font-weight: 600; }
+  .d-scene .sc-sub { margin-top: 1px; font-size: 9.5px; color: var(--sub); }
+  .sc-sleep { background: linear-gradient(155deg, #e9ebff, #f7f8ff); }
+  .sc-sleep .sc-ic { background: #dcdefc; color: #6152ea; }
+  .sc-cool { background: linear-gradient(155deg, #e2f0ff, #f6fbff); }
+  .sc-cool .sc-ic { background: #cfe6ff; color: #2f7dff; }
+  .sc-story { background: linear-gradient(155deg, #ffeeda, #fffaf3); }
+  .sc-story .sc-ic { background: #ffe0bb; color: #e8830f; }
+
+  /* ---------- now playing ---------- */
+  .d-now {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 12px 20px 0;
+    padding: 11px 13px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: var(--sh);
+  }
+  .d-now-body { flex: 1; min-width: 0; }
+  .d-now-top { display: flex; align-items: center; gap: 6px; font-size: 9.5px; color: #98a3b4; }
+  .d-now-title { margin-top: 3px; font-size: 13px; font-weight: 600; }
+  .d-now-sub { margin-top: 1px; font-size: 10px; color: var(--sub); }
+  .d-now-bar { height: 3px; margin-top: 7px; border-radius: 2px; background: #f1f4f9; overflow: hidden; }
+  .d-now-bar i { display: block; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #ffbc72, #ff9f43); }
+
+  /* ---------- device tiles ---------- */
+  .d-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .d-tiles .tile { min-height: 104px; padding: 12px 12px 11px; gap: 8px; }
+  .d-tiles .g { width: 36px; height: 36px; border-radius: 11px; }
+
+  /* ---------- guardian row ---------- */
+  .d-guard {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 16px 20px 0;
+    padding: 11px 14px;
+    border-radius: 18px;
+    background: linear-gradient(120deg, #fff7ec 0%, #fffdf9 60%, #fff9f2 100%);
+    box-shadow: inset 0 0 0 1px rgba(226, 180, 118, 0.22);
+  }
+  .d-guard-ic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: #ffe9cc;
+    color: #e8830f;
+    flex: 0 0 auto;
+  }
+  .d-guard-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #7a5a2e; }
+  .d-guard-sub { margin-top: 2px; font-size: 10px; color: #a98a5e; }
+  .d-guard-go { margin-left: auto; font-size: 10px; color: #b79a72; }
+
+  /* ---------- eco strip ---------- */
+  .d-eco { display: flex; align-items: center; gap: 6px; margin: 12px 20px 0; overflow: hidden; }
+  .d-eco-title { flex: 0 0 auto; font-size: 9.5px; color: #a2adbd; }
+  .d-eco-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 11px;
+    background: #eef2f9;
+    font-size: 9px;
+    color: #8b97a9;
+    white-space: nowrap;
+  }
+  .d-eco-item .ic { width: 10px; height: 10px; }
+  .d-eco-go { margin-left: auto; font-size: 10px; color: #b3bdcb; }
+
+  .d-foot { margin-top: 10px; text-align: center; font-size: 9px; letter-spacing: 1.4px; color: #bcc5d3; }
+</style>
+</head>
+<body>
+<div class="screen d1">
+  <div class="d-hero">
+    <i class="d-star" style="left:28px;top:44px;opacity:.55"></i>
+    <i class="d-star" style="left:64px;top:120px;opacity:.3"></i>
+    <i class="d-star" style="left:318px;top:58px;opacity:.45"></i>
+    <i class="d-star" style="left:352px;top:152px;opacity:.3"></i>
+    <i class="d-star" style="left:246px;top:20px;opacity:.4"></i>
+    <i class="d-star" style="left:150px;top:14px;opacity:.25"></i>
+
+    <div class="d-head">
+      <div>
+        <div class="d-kicker">MY HOME · 万物互联</div>
+        <div class="d-title">我的家</div>
+      </div>
+      <div class="d-badge"><i class="dot on"></i>2 台在线</div>
+    </div>
+
+    <div class="d-map">
+      <svg viewBox="0 0 342 178" width="342" height="178" fill="none">
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#79adf5" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#79adf5" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="ln" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#9cc8ff" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#9cc8ff" stop-opacity=".02"/>
+          </linearGradient>
+        </defs>
+        <circle cx="171" cy="90" r="96" fill="url(#g1)"/>
+        <circle cx="171" cy="90" r="54" stroke="rgba(255,255,255,.14)" stroke-dasharray="3 6"/>
+        <circle cx="171" cy="90" r="84" stroke="rgba(255,255,255,.08)" stroke-dasharray="3 7"/>
+        <circle cx="171" cy="90" r="120" stroke="rgba(255,255,255,.04)" stroke-dasharray="2 9"/>
+        <line x1="171" y1="90" x2="208" y2="46" stroke="url(#ln)" stroke-width="1.2"/>
+        <line x1="171" y1="90" x2="124" y2="123" stroke="url(#ln)" stroke-width="1.2"/>
+        <line x1="171" y1="90" x2="254" y2="105" stroke="url(#ln)" stroke-width="1"/>
+        <line x1="171" y1="90" x2="95" y2="55" stroke="url(#ln)" stroke-width="1"/>
+        <circle cx="208" cy="46" r="2.6" fill="#a6ceff" opacity=".7"/>
+        <circle cx="124" cy="123" r="2.6" fill="#ffc481" opacity=".7"/>
+        <circle cx="254" cy="105" r="2" fill="#9cc8ff" opacity=".35"/>
+        <circle cx="95" cy="55" r="2" fill="#9cc8ff" opacity=".35"/>
+      </svg>
+
+      <div class="dnd center" style="left:143px;top:62px">
+        <div class="dnd-box">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M4 10.4 12 4l8 6.4V19a1.6 1.6 0 0 1-1.6 1.6h-3.2v-6.2H8.8v6.2H5.6A1.6 1.6 0 0 1 4 19z"/></svg>
+        </div>
+      </div>
+
+      <div class="dnd fan" style="left:188px;top:26px">
+        <div class="dnd-box">
+          <svg class="ic" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+          </svg>
+        </div>
+        <i class="dnd-dot"></i>
+        <span class="dnd-label up">风扇 2 档</span>
+      </div>
+
+      <div class="dnd story" style="left:104px;top:103px">
+        <div class="dnd-box">
+          <svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+            <path d="M12 6.4v14.1"/>
+          </svg>
+        </div>
+        <i class="dnd-dot"></i>
+        <span class="dnd-label">故事机 播放中</span>
+      </div>
+
+      <div class="dnd empty" style="left:239px;top:90px">
+        <div class="dnd-box">+2</div>
+        <span class="dnd-label">待接入</span>
+      </div>
+
+      <div class="dnd empty" style="left:80px;top:40px">
+        <div class="dnd-box"><svg class="ic" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-overview">
+    <div class="d-ov">
+      <div class="d-ov-num">2<small>/4 台</small></div>
+      <div class="d-ov-label">在线设备</div>
+    </div>
+    <div class="d-ov">
+      <div class="d-ov-num">32<small>分钟</small></div>
+      <div class="d-ov-label">今日陪伴</div>
+    </div>
+    <div class="d-ov">
+      <div class="d-ov-num">24<small>°C</small></div>
+      <div class="d-ov-label">室内温度</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><span class="sec-title">快捷场景</span><span class="sec-sub">一键切换全屋</span></div>
+      <span class="sec-more">编辑</span>
+    </div>
+    <div class="d-scenes">
+      <div class="d-scene sc-sleep">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M20 14.3A8.4 8.4 0 0 1 9.7 4 8.5 8.5 0 1 0 20 14.3z"/></svg></div>
+        <div class="sc-name">睡眠</div>
+        <div class="sc-sub">21:00 自动</div>
+      </div>
+      <div class="d-scene sc-cool">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8.5h10.5a2.8 2.8 0 1 0-2.8-2.8"/><path d="M3 12.5h14a2.8 2.8 0 1 1-2.8 2.8"/><path d="M3 16.5h6.5"/></svg></div>
+        <div class="sc-name">清凉风</div>
+        <div class="sc-sub">风扇 2 档</div>
+      </div>
+      <div class="d-scene sc-story">
+        <div class="sc-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="18" r="2.4"/><circle cx="17.5" cy="15.6" r="2.4"/><path d="M9.4 18V7.4L19.9 5.6v10"/></svg></div>
+        <div class="sc-name">听故事</div>
+        <div class="sc-sub">继续上次</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-now">
+    <div class="g orange">
+      <svg class="ic" viewBox="0 0 24 24">
+        <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+        <path d="M12 6.4v14.1"/>
+      </svg>
+    </div>
+    <div class="d-now-body">
+      <div class="d-now-top">正在播放<i class="dot on"></i>儿童房</div>
+      <div class="d-now-title">小熊的冬天</div>
+      <div class="d-now-sub">03:12 / 12:40 · 音量 6</div>
+      <div class="d-now-bar"><i style="width:26%"></i></div>
+    </div>
+    <button class="icon-btn primary" style="width:34px;height:34px">
+      <svg class="ic sm" viewBox="0 0 24 24"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>
+    </button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <div><span class="sec-title">常用设备</span><span class="sec-sub">2 台在线</span></div>
+      <span class="sec-more">全部 4 台 ›</span>
+    </div>
+    <div class="d-tiles">
+      <div class="tile on">
+        <div class="tile-top">
+          <div class="g blue">
+            <svg class="ic" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="1.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+              <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+            </svg>
+          </div>
+          <i class="dot on"></i>
+        </div>
+        <div class="tile-id">
+          <div class="tile-name">风扇</div>
+          <div class="tile-state">运行中 · <strong>2 档</strong></div>
+        </div>
+        <div class="tile-foot">
+          <span class="tile-meta">客厅 · 25 分钟</span>
+          <div class="switch on"></div>
+        </div>
+      </div>
+
+      <div class="tile on">
+        <div class="tile-top">
+          <div class="g orange">
+            <svg class="ic" viewBox="0 0 24 24">
+              <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+              <path d="M12 6.4v14.1"/>
+            </svg>
+          </div>
+          <i class="dot on"></i>
+        </div>
+        <div class="tile-id">
+          <div class="tile-name">故事机</div>
+          <div class="tile-state">播放中 · <strong>03:12</strong></div>
+        </div>
+        <div class="tile-foot">
+          <span class="tile-meta">儿童房</span>
+          <button class="icon-btn" style="width:26px;height:26px">
+            <svg class="ic xs" viewBox="0 0 24 24"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-guard">
+    <div class="d-guard-ic">
+      <svg class="ic sm" viewBox="0 0 24 24"><path d="M12 3.2l7 2.8v5.3c0 4.4-2.9 7.4-7 9.5-4.1-2.1-7-5.1-7-9.5V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg>
+    </div>
+    <div>
+      <div class="d-guard-title">家庭守护 <span class="tag play" style="height:16px;padding:0 6px;font-size:9px;border-radius:8px">进行中</span></div>
+      <div class="d-guard-sub">今日 32 / 60 分钟 · 内容分级 L2 · 睡眠 21:00</div>
+    </div>
+    <span class="d-guard-go">管理 ›</span>
+  </div>
+
+  <div class="d-eco">
+    <span class="d-eco-title">即将接入</span>
+    <span class="d-eco-item">智能灯</span>
+    <span class="d-eco-item">净化器</span>
+    <span class="d-eco-item">温湿度计</span>
+    <span class="d-eco-item">插座</span>
+    <span class="d-eco-go">›</span>
+  </div>
+
+  <div class="d-foot">SC CONTROL · 万物互联</div>
+</div>
+</body>
+</html>

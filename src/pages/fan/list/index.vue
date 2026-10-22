@@ -25,7 +25,7 @@
               <text class="device-icon-text">BLE</text>
             </view>
             <view class="device-info">
-              <text class="device-name">{{ device.name }}</text>
+              <text class="device-name">{{ device.displayName || device.name }}</text>
               <text class="device-id">{{ device.deviceId }}</text>
             </view>
           </view>
@@ -39,7 +39,7 @@
             <view class="device-actions">
               <view
                 :class="['action-btn', device.connected ? 'disconnect-btn' : 'connect-btn']"
-                @tap.stop="connectDevice(device)"
+                @tap.stop="toggleConnect(device)"
               >
                 <text class="action-btn-text">{{ device.connected ? '断开' : '连接' }}</text>
               </view>
@@ -109,6 +109,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import Taro from '@tarojs/taro'
 import { bleManager } from '../../../utils/ble'
 import './index.css'
+import { connectDevice, disconnectDevice, isConnectedTo, needsSwitch, getLink } from '../../../utils/link'
+import { getAlias } from '../../../utils/deviceStore'
 
 export default {
   setup() {
@@ -121,8 +123,11 @@ export default {
     const loadSavedDevices = () => {
       try {
         const devices = Taro.getStorageSync('savedDevices') || []
-        devices.forEach(d => { d.connected = false })
-        savedDevices.value = devices
+        savedDevices.value = devices.map((d) => ({
+          ...d,
+          displayName: getAlias(d.deviceId) || d.name,
+          connected: isConnectedTo(d.deviceId)
+        }))
       } catch (e) {
         console.error('加载设备列表失败:', e)
       }
@@ -130,7 +135,13 @@ export default {
 
     const saveDevices = () => {
       try {
-        Taro.setStorageSync('savedDevices', savedDevices.value)
+        const raw = savedDevices.value.map(d => ({
+          deviceId: d.deviceId,
+          name: d.name,
+          RSSI: d.RSSI,
+          connected: false
+        }))
+        Taro.setStorageSync('savedDevices', raw)
       } catch (e) {
         console.error('保存设备列表失败:', e)
       }
@@ -186,71 +197,67 @@ export default {
     const deleteDevice = (device) => {
       Taro.showModal({
         title: '确认删除',
-        content: `确定要删除设备"${device.name}"吗？`,
+        content: `确定要删除设备"${device.displayName || device.name}"吗？`,
         success: async (res) => {
           if (res.confirm) {
-            if (device.connected) {
-              await bleManager.disconnect(device.deviceId)
+            if (isConnectedTo(device.deviceId)) {
+              await disconnectDevice(true)
             }
             savedDevices.value = savedDevices.value.filter(
               d => d.deviceId !== device.deviceId
             )
             saveDevices()
+            loadSavedDevices()
             Taro.showToast({ title: '删除成功', icon: 'success' })
           }
         }
       })
     }
 
-    const connectDevice = async (device) => {
-      if (device.connected) {
-        Taro.showLoading({ title: '断开中...' })
-        await bleManager.disconnect(device.deviceId)
-        device.connected = false
-        saveDevices()
-        Taro.hideLoading()
-        Taro.showToast({ title: '已断开连接', icon: 'success' })
-      } else {
-        Taro.showLoading({ title: '连接中...' })
-        let success = await bleManager.connect(device.deviceId)
-
-        if (!success) {
-          Taro.showLoading({ title: '正在扫描设备...' })
-          success = await bleManager.connectWithScan(device.deviceId, 8000)
-        }
-
-        Taro.hideLoading()
-
-        if (success) {
-          device.connected = true
-          saveDevices()
-          Taro.showToast({ title: '连接成功', icon: 'success' })
-        } else {
-          Taro.showToast({ title: '连接失败，请确认设备已开启', icon: 'none', duration: 2500 })
-        }
-      }
-    }
-
-    const goToDevice = (device) => {
-      if (!device.connected) {
-        Taro.showModal({
-          title: '提示',
-          content: '设备未连接，是否先连接？',
-          success: async (res) => {
-            if (res.confirm) {
-              await connectDevice(device)
-              if (device.connected) {
-                Taro.navigateTo({
-                  url: `/pages/fan/control/index?deviceId=${device.deviceId}&name=${encodeURIComponent(device.name)}`
-                })
-              }
-            }
-          }
-        })
+    const toggleConnect = async (device) => {
+      if (isConnectedTo(device.deviceId)) {
+        await disconnectDevice()
+        loadSavedDevices()
         return
       }
+
+      if (needsSwitch(device.deviceId, 'fan')) {
+        const res = await Taro.showModal({
+          title: '切换连接',
+          content: '蓝牙同一时间只能连接一台设备，连接这台会先断开当前设备。',
+          confirmText: '继续连接'
+        })
+        if (!res.confirm) return
+      }
+
+      Taro.showLoading({ title: '连接中...' })
+      const ok = await connectDevice(device.deviceId, 'fan', device.name)
+      Taro.hideLoading()
+
+      if (ok) {
+        Taro.showToast({ title: '连接成功', icon: 'success' })
+      } else {
+        Taro.showToast({
+          title: getLink().error || '连接失败，请确认设备已开启',
+          icon: 'none',
+          duration: 2500
+        })
+      }
+      loadSavedDevices()
+    }
+
+    const goToDevice = async (device) => {
+      if (!isConnectedTo(device.deviceId)) {
+        const res = await Taro.showModal({
+          title: '提示',
+          content: '设备未连接，是否先连接？'
+        })
+        if (!res.confirm) return
+        await toggleConnect(device)
+        if (!isConnectedTo(device.deviceId)) return
+      }
       Taro.navigateTo({
-        url: `/pages/fan/control/index?deviceId=${device.deviceId}&name=${encodeURIComponent(device.name)}`
+        url: `/pages/fan/control/index?deviceId=${encodeURIComponent(device.deviceId)}&name=${encodeURIComponent(device.displayName || device.name)}`
       })
     }
 
@@ -275,7 +282,7 @@ export default {
       toggleScan,
       addDevice,
       deleteDevice,
-      connectDevice,
+      toggleConnect,
       goToDevice
     }
   }

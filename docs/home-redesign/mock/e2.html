@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>空态 · 第一次接入</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  .e2-hero {
+    position: relative;
+    padding: 18px 24px 30px;
+    background:
+      radial-gradient(95% 75% at 50% 0%, #2d63b4 0%, rgba(45, 99, 180, 0) 60%),
+      linear-gradient(178deg, #12294e 0%, #0b1b36 60%, #0a1830 100%);
+    overflow: hidden;
+  }
+  .e2-star { position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%; background: #fff; }
+  .e2-head { position: relative; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; }
+  .e2-kicker { font-size: 8.5px; font-weight: 700; letter-spacing: 2.4px; color: rgba(150, 190, 245, 0.6); }
+  .e2-title { margin-top: 4px; font-size: 22px; font-weight: 700; letter-spacing: 0.4px; color: #fff; }
+  .e2-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 25px;
+    padding: 0 10px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(150, 195, 255, 0.14);
+    font-size: 10px;
+    color: rgba(206, 224, 250, 0.78);
+  }
+  .e2-map { position: relative; z-index: 2; width: 342px; height: 196px; margin: 2px auto 0; }
+  .e2-map svg { position: absolute; inset: 0; }
+  .e2-map .e2-center svg,
+  .e2-map .e2-node svg { position: static; inset: auto; }
+
+  .e2-center {
+    position: absolute;
+    left: 143px;
+    top: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(155deg, #ffffff 0%, #d9e8ff 100%);
+    color: #2468d8;
+    box-shadow: 0 0 0 6px rgba(110, 165, 245, 0.09), 0 12px 30px rgba(3, 12, 30, 0.5);
+  }
+  .e2-center .ic { width: 24px; height: 24px; }
+
+  .e2-node {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px dashed rgba(150, 190, 245, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(180, 210, 250, 0.42);
+  }
+  .e2-node .ic { width: 13px; height: 13px; }
+
+  .e2-poem {
+    position: relative;
+    z-index: 2;
+    margin-top: 2px;
+    text-align: center;
+  }
+  .e2-poem p {
+    margin: 0;
+    font-size: 12.5px;
+    letter-spacing: 0.4px;
+    color: rgba(226, 238, 255, 0.86);
+  }
+  .e2-poem span {
+    display: block;
+    margin-top: 5px;
+    font-size: 10px;
+    letter-spacing: 0.2px;
+    color: rgba(170, 200, 240, 0.55);
+  }
+
+  .e2-card {
+    position: relative;
+    z-index: 3;
+    margin: -24px 20px 0;
+    padding: 20px 18px 18px;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 14px 40px rgba(20, 38, 70, 0.12);
+  }
+  .e2-card-title { font-size: 17px; font-weight: 700; letter-spacing: 0.2px; }
+  .e2-card-desc { margin-top: 6px; font-size: 11.5px; line-height: 1.7; color: #7d8a9e; }
+  .e2-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 46px;
+    margin-top: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4b95ff 0%, #2f7dff 100%);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 10px 24px rgba(47, 125, 255, 0.3);
+  }
+  .e2-alt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 10.5px;
+    color: #8b97a9;
+  }
+  .e2-alt b { font-weight: 500; color: #5f7c9e; }
+
+  .e2-types { margin: 18px 20px 0; }
+  .e2-types-title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 9px; padding: 0 2px; }
+  .e2-types-title span:first-child { font-size: 12px; font-weight: 600; color: #4d5b72; }
+  .e2-types-title span:last-child { font-size: 9.5px; color: #a2adbd; }
+  .e2-type-row { display: flex; gap: 8px; }
+  .e2-type {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 2px 10px;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(22, 40, 72, 0.05);
+    font-size: 9.5px;
+    color: #6d7c93;
+  }
+  .e2-type .ic { width: 17px; height: 17px; }
+  .e2-type.soon { background: rgba(255, 255, 255, 0.55); box-shadow: none; border: 1px dashed #d6deea; color: #9aa5b6; }
+  .e2-type small { font-size: 8px; color: #b6c0ce; }
+
+  .e2-help {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 16px 20px 0;
+    padding: 12px 14px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.6);
+    font-size: 10.5px;
+    color: #7d8a9e;
+  }
+  .e2-help span { margin-left: auto; color: #aab4c2; }
+
+  .e2-guide {
+    margin: 16px 20px 0;
+    padding: 12px 14px 13px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(22, 40, 72, 0.04);
+  }
+  .e2-guide-title { font-size: 9.5px; color: #a2adbd; letter-spacing: 0.6px; }
+  .e2-guide-row { display: flex; margin-top: 10px; }
+  .e2-step { flex: 1; display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #5f6e86; }
+  .e2-step i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #eaf2ff;
+    color: #2f7dff;
+    font-size: 9px;
+    font-weight: 700;
+    font-style: normal;
+  }
+  .e2-foot { margin-top: 18px; text-align: center; font-size: 9px; letter-spacing: 1.4px; color: #bcc5d3; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="e2-hero">
+    <i class="e2-star" style="left:34px;top:52px;opacity:.5"></i>
+    <i class="e2-star" style="left:86px;top:132px;opacity:.28"></i>
+    <i class="e2-star" style="left:316px;top:66px;opacity:.42"></i>
+    <i class="e2-star" style="left:350px;top:170px;opacity:.26"></i>
+    <i class="e2-star" style="left:250px;top:26px;opacity:.35"></i>
+    <i class="e2-star" style="left:148px;top:18px;opacity:.22"></i>
+
+    <div class="e2-head">
+      <div>
+        <div class="e2-kicker">MY HOME · 万物互联</div>
+        <div class="e2-title">我的家</div>
+      </div>
+      <div class="e2-badge"><i class="dot"></i>还没有设备</div>
+    </div>
+
+    <div class="e2-map">
+      <svg viewBox="0 0 342 196" width="342" height="196" fill="none">
+        <defs>
+          <radialGradient id="e2g" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#79adf5" stop-opacity=".18"/>
+            <stop offset="1" stop-color="#79adf5" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="171" cy="98" r="100" fill="url(#e2g)"/>
+        <circle cx="171" cy="98" r="56" stroke="rgba(255,255,255,.12)" stroke-dasharray="3 6"/>
+        <circle cx="171" cy="98" r="88" stroke="rgba(255,255,255,.08)" stroke-dasharray="3 7"/>
+        <circle cx="171" cy="98" r="126" stroke="rgba(255,255,255,.04)" stroke-dasharray="2 9"/>
+      </svg>
+
+      <div class="e2-center">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M4 10.4 12 4l8 6.4V19a1.6 1.6 0 0 1-1.6 1.6h-3.2v-6.2H8.8v6.2H5.6A1.6 1.6 0 0 1 4 19z"/></svg>
+      </div>
+
+      <div class="e2-node" style="left:196px;top:24px"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+      <div class="e2-node" style="left:56px;top:120px"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+      <div class="e2-node" style="left:248px;top:142px"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+    </div>
+
+    <div class="e2-poem">
+      <p>把第一台设备接进来，这里就会亮起来</p>
+      <span>蓝牙自动发现 · 无需手动配对</span>
+    </div>
+  </div>
+
+  <div class="e2-card">
+    <div class="e2-card-title">家里还没有设备</div>
+    <div class="e2-card-desc">打开设备电源后靠近手机，我们会自动发现它。</div>
+    <div class="e2-cta">
+      <svg class="ic sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3a9 9 0 0 1 9 9"/><path d="M12 6.5a5.5 5.5 0 0 1 5.5 5.5"/></svg>
+      搜索附近设备
+    </div>
+    <div class="e2-alt">或 <b>扫码 / 输入设备码</b> 绑定 ›</div>
+  </div>
+
+  <div class="e2-types">
+    <div class="e2-types-title">
+      <span>支持接入</span>
+      <span>风扇 · 故事机现已支持</span>
+    </div>
+    <div class="e2-type-row">
+      <div class="e2-type">
+        <svg class="ic" viewBox="0 0 24 24" style="color:#2f7dff">
+          <circle cx="12" cy="12" r="1.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(120 12 12)"/>
+          <ellipse cx="12" cy="6.4" rx="2.5" ry="4.9" transform="rotate(240 12 12)"/>
+        </svg>
+        风扇
+      </div>
+      <div class="e2-type">
+        <svg class="ic" viewBox="0 0 24 24" style="color:#e8830f">
+          <path d="M12 6.4C10.5 5 8 4.5 5 4.5v14c3 0 5.5.5 7 2 1.5-1.5 4-2 7-2v-14c-3 0-5.5.5-7 2z"/>
+          <path d="M12 6.4v14.1"/>
+        </svg>
+        故事机
+      </div>
+      <div class="e2-type soon">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 2h5.2c0-.8.3-1.5.9-2A6 6 0 0 0 12 3z"/></svg>
+        智能灯
+        <small>即将支持</small>
+      </div>
+      <div class="e2-type soon">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="4"/><circle cx="12" cy="9.5" r="2.4"/><path d="M8.5 16h7"/></svg>
+        净化器
+        <small>即将支持</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="e2-guide">
+    <div class="e2-guide-title">三步开始</div>
+    <div class="e2-guide-row">
+      <div class="e2-step"><i>1</i>接通电源</div>
+      <div class="e2-step"><i>2</i>点击搜索</div>
+      <div class="e2-step"><i>3</i>归入房间</div>
+    </div>
+  </div>
+
+  <div class="e2-help">
+    <svg class="ic xs" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .9-1 1.6v.4"/><path d="M12 17h.01"/></svg>
+    找不到设备？查看配对帮助
+    <span>›</span>
+  </div>
+
+  <div class="e2-foot">SC CONTROL · 万物互联</div>
+</div>
+</body>
+</html>
