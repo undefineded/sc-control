@@ -409,6 +409,12 @@
   font-size: 24rpx;
 }
 
+.row-icon.child {
+  color: #e8830f;
+  background-color: #fff4e6;
+  font-size: 24rpx;
+}
+
 .row-copy {
   flex: 1;
   min-width: 0;

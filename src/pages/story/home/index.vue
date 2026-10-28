@@ -137,7 +137,10 @@
             </view>
             <view class="now-main">
               <view class="now-top">
-                <text class="now-label">正在播放 · {{ status.mode === 'story' ? '故事' : '音乐' }}</text>
+                <view class="now-tags">
+                  <text class="now-label">正在播放 · {{ status.mode === 'story' ? '故事' : '音乐' }}</text>
+                  <text v-if="childLock" class="child-lock-chip">童锁</text>
+                </view>
                 <view :class="['live-dot', { paused: !status.play }]"></view>
               </view>
               <text class="now-title">{{ status.title || '选择一个故事' }}</text>
@@ -221,20 +224,22 @@
               <text class="empty-desc">请到「家长控制 → 内容管理」中勾选</text>
             </view>
 
-            <view
-              v-for="item in stories"
-              :key="item.i"
-              class="story-row"
-              @tap="playStory(item)"
-            >
-              <image class="story-thumb" :src="storyIcon" mode="aspectFill" />
-              <view class="story-copy">
-                <text class="story-name">{{ item.n }}</text>
-                <text class="story-meta">故事 · 点击播放</text>
+            <view v-else class="library-list">
+              <view
+                v-for="item in stories"
+                :key="item.i"
+                :class="['story-row', { playing: isPlaying(item) }]"
+                @tap="playStory(item)"
+              >
+                <image class="story-thumb" :src="storyIcon" mode="aspectFill" />
+                <view class="story-copy">
+                  <text class="story-name">{{ item.n }}</text>
+                  <text class="story-meta">{{ isPlaying(item) ? '故事 · 正在播放' : '故事 · 点击播放' }}</text>
+                </view>
+                <text :class="['story-state', { playing: isPlaying(item) }]">
+                  {{ isPlaying(item) ? '播放中' : '播放' }}
+                </text>
               </view>
-              <text :class="['story-state', { playing: status.title === item.n }]">
-                {{ status.title === item.n ? '播放中' : '播放' }}
-              </text>
             </view>
           </block>
 
@@ -246,40 +251,47 @@
 
             <!-- 第一层: SD 卡 /music 下的文件夹 -->
             <block v-else-if="!currentFolder">
-              <view
-                v-for="group in musicGroups"
-                :key="group.ci"
-                class="folder-row"
-                @tap="enterFolder(group)"
-              >
-                <image class="folder-icon" :src="folderIcon" mode="aspectFill" />
-                <view class="story-copy">
-                  <text class="story-name">{{ group.name }}</text>
-                  <text class="story-meta">文件夹 · {{ group.items.length }} 首</text>
+              <view class="library-list">
+                <view
+                  v-for="group in musicGroups"
+                  :key="group.ci"
+                  class="folder-row"
+                  @tap="enterFolder(group)"
+                >
+                  <image class="folder-icon" :src="folderIcon" mode="aspectFill" />
+                  <view class="story-copy">
+                    <text class="story-name">{{ group.name }}</text>
+                    <text class="story-meta">文件夹 · {{ group.items.length }} 首</text>
+                  </view>
+                  <view class="chevron"></view>
                 </view>
-                <view class="chevron"></view>
               </view>
             </block>
 
             <!-- 第二层: 该文件夹里的歌曲 -->
             <block v-else>
-              <view class="folder-back" @tap="leaveFolder">
-                <text class="folder-back-text">‹ {{ currentFolder.name }}</text>
+              <view class="folder-back" hover-class="folder-back-hover" @tap="leaveFolder">
+                <view class="folder-back-left">
+                  <text class="folder-back-icon">‹</text>
+                  <text class="folder-back-text">{{ currentFolder.name }}</text>
+                </view>
                 <text class="group-count">{{ currentFolder.items.length }} 首</text>
               </view>
-              <view
-                v-for="item in currentFolder.items"
-                :key="item.i"
-                class="story-row"
-                @tap="playMusic(item)"
-              >
-                <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
-                <view class="story-copy">
-                  <text class="story-name">{{ musicName(item.n) }}</text>
-                  <text class="story-meta">{{ status.title === item.n ? '播放中' : '点击播放' }}</text>
-                </view>
-                <view class="fav-btn" @tap.stop="toggleFav(item)">
-                  <text :class="['fav-icon', { on: item.f }]">{{ item.f ? '★' : '☆' }}</text>
+              <view class="library-list">
+                <view
+                  v-for="item in currentFolder.items"
+                  :key="item.i"
+                  :class="['story-row', { playing: isPlaying(item) }]"
+                  @tap="playMusic(item)"
+                >
+                  <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
+                  <view class="story-copy">
+                    <text class="story-name">{{ musicName(item.n) }}</text>
+                    <text class="story-meta">{{ isPlaying(item) ? '正在播放' : '点击播放' }}</text>
+                  </view>
+                  <view class="fav-btn" @tap.stop="toggleFav(item)">
+                    <text :class="['fav-icon', { on: item.f }]">{{ item.f ? '★' : '☆' }}</text>
+                  </view>
                 </view>
               </view>
             </block>
@@ -291,19 +303,21 @@
               <text class="empty-desc">在音乐列表点 ☆，或在故事机歌曲列表长按 OK 收藏</text>
             </view>
 
-            <view
-              v-for="item in favorites"
-              :key="item.i"
-              class="story-row"
-              @tap="playMusic(item)"
-            >
-              <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
-              <view class="story-copy">
-                <text class="story-name">{{ musicName(item.n) }}</text>
-                <text class="story-meta">{{ item.c }} · {{ status.title === item.n ? '播放中' : '点击播放' }}</text>
-              </view>
-              <view class="fav-btn" @tap.stop="toggleFav(item)">
-                <text class="fav-icon on">★</text>
+            <view class="library-list">
+              <view
+                v-for="item in favorites"
+                :key="item.i"
+                :class="['story-row', { playing: isPlaying(item) }]"
+                @tap="playMusic(item)"
+              >
+                <image class="story-thumb" :src="musicIcon" mode="aspectFill" />
+                <view class="story-copy">
+                  <text class="story-name">{{ musicName(item.n) }}</text>
+                  <text class="story-meta">{{ item.c }} · {{ isPlaying(item) ? '正在播放' : '点击播放' }}</text>
+                </view>
+                <view class="fav-btn" @tap.stop="toggleFav(item)">
+                  <text class="fav-icon on">★</text>
+                </view>
               </view>
             </view>
           </block>
@@ -353,6 +367,7 @@ const emptyStatus = {
   bedtime: false,
   remote: false,
   bound: true,
+  childLock: false,
   timeSynced: false,
   dayKey: 0
 }
@@ -405,6 +420,12 @@ export default {
     const leaveFolder = () => { folderCi.value = null }
 
     const locked = computed(() => Number(status.value.lock) !== 0)
+    /* 童锁状态优先取设备实时状态, 其次取配置; 旧固件没有该字段时视为关闭 */
+    const childLock = computed(() => {
+      if (typeof status.value.childLock === 'boolean') return status.value.childLock
+      if (config.value && typeof config.value.childLock === 'boolean') return config.value.childLock
+      return false
+    })
     const progress = computed(() => {
       const dur = Number(status.value.dur || 0)
       if (!dur) return 0
@@ -653,6 +674,15 @@ export default {
 
     const musicName = (name) => String(name || '').replace(/\.mp3$/i, '')
 
+    /* 当前曲目高亮: 设备上报的 title 可能带/不带扩展名, 统一后比较 */
+    const isPlaying = (item) => {
+      if (!item) return false
+      const current = String(status.value.title || '').trim()
+      const name = String(item.n || '').trim()
+      if (!current || !name) return false
+      return current === name || musicName(current) === musicName(name)
+    }
+
     const playMusic = async (item) => {
       if (locked.value) { toast(lockTitle.value); return }
       try {
@@ -759,6 +789,7 @@ export default {
       authPin,
       authing,
       locked,
+      childLock,
       progress,
       remainingText,
       lockTitle,
@@ -777,6 +808,7 @@ export default {
       next,
       playStory,
       musicName,
+      isPlaying,
       playMusic,
       toggleFav,
       onVolumeChanging,

@@ -40,6 +40,8 @@ export interface StoryStatus {
   bound: boolean
   timeSynced: boolean
   dayKey: number
+  /* 童锁: 锁定故事机实体按键/旋钮, 小程序控制不受影响 */
+  childLock?: boolean
 }
 
 export interface StoryConfig {
@@ -58,6 +60,8 @@ export interface StoryConfig {
   limit: number
   lock: number
   reason: string
+  /* 童锁: 锁定故事机实体按键/旋钮, 小程序控制不受影响 */
+  childLock?: boolean
 }
 
 export interface StoryItem {
@@ -548,6 +552,15 @@ class StoryBleManager {
   async setConfig(cfg: Record<string, any>): Promise<StoryConfig> {
     const res = await this.request('set', cfg, 6000)
     if (res.data) return res.data as StoryConfig
+    return this.getConfig()
+  }
+
+  /* 童锁: 只锁故事机实体按键/旋钮, 手机端控制保持可用. */
+  async setChildLock(enabled: boolean): Promise<StoryConfig> {
+    const res = await this.request('set', { childLock: !!enabled }, 5000)
+    if (res.data && typeof res.data.childLock === 'boolean') {
+      return res.data as StoryConfig
+    }
     return this.getConfig()
   }
 

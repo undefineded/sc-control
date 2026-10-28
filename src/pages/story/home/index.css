@@ -401,6 +401,10 @@
 }
 
 .now-card {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 12rpx;
+  z-index: 20;
   display: flex;
   gap: 22rpx;
   padding: 24rpx;
@@ -474,12 +478,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12rpx;
+}
+
+.now-tags {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 0;
 }
 
 .now-label {
   font-size: 20rpx;
   font-weight: 600;
   color: #d98a3e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.child-lock-chip {
+  flex-shrink: 0;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  background-color: #f0edff;
+  color: #7b6cf6;
+  font-size: 18rpx;
+  font-weight: 600;
 }
 
 .live-dot {
@@ -530,49 +555,55 @@
 .transport {
   display: flex;
   align-items: center;
-  gap: 14rpx;
+  gap: 16rpx;
   margin-top: 18rpx;
 }
 
 .ctrl-btn {
-  width: 56rpx;
-  height: 56rpx;
+  width: 80rpx;
+  height: 80rpx;
   border-radius: 50%;
   background-color: #f4f6fa;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.ctrl-btn:active {
+  background-color: #ffe9d2;
 }
 
 .tri {
   width: 0;
   height: 0;
-  border-top: 10rpx solid transparent;
-  border-bottom: 10rpx solid transparent;
+  border-top: 14rpx solid transparent;
+  border-bottom: 14rpx solid transparent;
 }
 
 .tri-prev {
-  border-right: 14rpx solid #4b5769;
-  margin-left: -4rpx;
+  border-right: 19rpx solid #4b5769;
+  margin-left: -5rpx;
 }
 
 .tri-next {
-  border-left: 14rpx solid #4b5769;
-  margin-right: -4rpx;
+  border-left: 19rpx solid #4b5769;
+  margin-right: -5rpx;
 }
 
 .play-btn {
-  min-width: 104rpx;
-  height: 60rpx;
-  padding: 0 22rpx;
+  min-width: 112rpx;
+  height: 76rpx;
+  padding: 0 24rpx;
   border-radius: 999rpx;
   background: linear-gradient(145deg, #ffb15c, #ff8c3c);
   color: #ffffff;
-  font-size: 24rpx;
+  font-size: 25rpx;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   box-shadow: 0 8rpx 18rpx rgba(255, 143, 60, 0.3);
 }
 
@@ -746,6 +777,18 @@
   color: #a7b0be;
 }
 
+/* 内容库列表: 限高后内部滚动, 避免把播放控制挤出屏幕 */
+.library-list {
+  max-height: 760rpx;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 2rpx 4rpx 2rpx 2rpx;
+}
+.library-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .story-row {
   display: flex;
   align-items: center;
@@ -755,10 +798,25 @@
   border-radius: 22rpx;
   margin-bottom: 14rpx;
   border: 2rpx solid transparent;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .story-row:active {
   background-color: #fffdf9;
+}
+
+/* 正在播放的曲目: 整行高亮, 不只靠右侧文字 */
+.story-row.playing {
+  background: linear-gradient(105deg, #fff4e6 0%, #fffaf2 58%, #ffffff 100%);
+  border-color: #ffcf9a;
+  box-shadow: 0 8rpx 22rpx rgba(255, 159, 67, 0.14);
+}
+.story-row.playing .story-name {
+  color: #b5651d;
+  font-weight: 700;
+}
+.story-row.playing .story-thumb {
+  box-shadow: 0 0 0 4rpx rgba(255, 159, 67, 0.24);
 }
 
 .story-thumb {
@@ -834,18 +892,47 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8rpx 12rpx 16rpx;
+  min-height: 84rpx;
+  padding: 0 24rpx;
+  margin-bottom: 14rpx;
+  border-radius: 20rpx;
+  background-color: #ffffff;
+  border: 2rpx solid #edf0f5;
+}
+
+.folder-back-hover {
+  background-color: #fff8ef;
+}
+
+.folder-back-left {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 0;
+}
+
+.folder-back-icon {
+  font-size: 44rpx;
+  line-height: 1;
+  color: #ff8f3e;
+  margin-top: -4rpx;
+  flex-shrink: 0;
 }
 
 .folder-back-text {
-  font-size: 26rpx;
+  font-size: 27rpx;
   font-weight: 600;
   color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .group-count {
   font-size: 20rpx;
   color: #a7b0be;
+  flex-shrink: 0;
+  margin-left: 16rpx;
 }
 
 .fav-btn {

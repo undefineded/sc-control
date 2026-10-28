@@ -172,6 +172,19 @@
             />
           </view>
 
+          <view class="group row-group">
+            <view class="row-icon child">锁</view>
+            <view class="row-copy">
+              <text class="row-title">童锁</text>
+              <text class="row-desc">{{ childLock ? '实体按键和旋钮已锁定，手机仍可控制' : '防止孩子误触实体按键和旋钮' }}</text>
+            </view>
+            <switch
+              :checked="childLock"
+              color="#ff9f43"
+              @change="onChildLockChange"
+            />
+          </view>
+
           <view class="group link-group" @tap="goContent">
             <view class="row-icon grid">选</view>
             <view class="row-copy">
@@ -289,6 +302,7 @@ export default {
     const volMin = ref(3)
     const volMax = ref(12)
     const remoteLocked = ref(false)
+    const childLock = ref(false)
     const allowlistEnabled = ref(false)
 
     /* 固件下发的 used / limit 都是"秒", 显示时再换成分钟 */
@@ -347,6 +361,8 @@ export default {
       volMin.value = Number(cfg.volMin || 0)
       volMax.value = Number(cfg.volMax || 21)
       remoteLocked.value = !!cfg.remoteLocked
+      /* 旧固件还没有 childLock 字段: 保持当前开关, 不清零 */
+      if (typeof cfg.childLock === 'boolean') childLock.value = cfg.childLock
       allowlistEnabled.value = !!cfg.allowlistEnabled
       pinVerified.value = !cfg.hasPin ? true : pinVerified.value
     }
@@ -355,6 +371,7 @@ export default {
       if (!next) return
       status.value = next
       if (typeof next.remote === 'boolean') remoteLocked.value = next.remote
+      if (typeof next.childLock === 'boolean') childLock.value = next.childLock
       if (config.value && typeof next.bound === 'boolean') config.value.bound = next.bound
     }
 
@@ -436,6 +453,20 @@ export default {
       }
     }
 
+    const onChildLockChange = async (e) => {
+      const value = !!e.detail.value
+      const previous = childLock.value
+      childLock.value = value
+      try {
+        const cfg = await storyBle.setChildLock(value)
+        if (cfg && typeof cfg.childLock === 'boolean') childLock.value = cfg.childLock
+        toast(value ? '童锁已开启' : '童锁已关闭')
+      } catch (err) {
+        childLock.value = previous
+        toast(err.message || '操作失败')
+      }
+    }
+
     const saveConfig = async () => {
       if (saving.value) return
       saving.value = true
@@ -446,7 +477,8 @@ export default {
           bedStartMin: toMinutes(bedStart.value),
           bedEndMin: toMinutes(bedEnd.value),
           volMin: volMin.value,
-          volMax: volMax.value
+          volMax: volMax.value,
+          childLock: childLock.value
         })
         config.value = cfg
         toast('家长设置已保存')
@@ -516,6 +548,7 @@ export default {
       volMin,
       volMax,
       remoteLocked,
+      childLock,
       allowlistEnabled,
       limitOptions,
       used,
@@ -539,6 +572,7 @@ export default {
       onVolMaxChanging,
       onVolMaxChange,
       onRemoteLockChange,
+      onChildLockChange,
       saveConfig,
       savePin,
       cancelPinEditor

@@ -616,6 +616,17 @@
   font-size: 20rpx;
   color: #a3adbb;
 }
+/* 扫描结果可能很多, 限高后内部滚动, 避免把页面撑得过长 */
+.near-list {
+  max-height: 560rpx;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 4rpx;
+}
+.near-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 .near-row {
   display: flex;
   align-items: center;

@@ -150,26 +150,28 @@
         没有发现新设备，确认设备已开启并在附近
       </view>
 
-      <view v-for="item in nearby.list" :key="item.deviceId" class="near-row">
-        <view :class="['near-glyph', item.kind]">
-          <view v-if="item.kind === 'fan'" class="fan-g sm">
-            <view class="blade b1"></view>
-            <view class="blade b2"></view>
-            <view class="blade b3"></view>
-            <view class="hub"></view>
+      <view v-if="nearby.list.length" class="near-list">
+        <view v-for="item in nearby.list" :key="item.deviceId" class="near-row">
+          <view :class="['near-glyph', item.kind]">
+            <view v-if="item.kind === 'fan'" class="fan-g sm">
+              <view class="blade b1"></view>
+              <view class="blade b2"></view>
+              <view class="blade b3"></view>
+              <view class="hub"></view>
+            </view>
+            <view v-else class="book-g sm">
+              <view class="book-page left"></view>
+              <view class="book-page right"></view>
+              <view class="book-spine"></view>
+            </view>
           </view>
-          <view v-else class="book-g sm">
-            <view class="book-page left"></view>
-            <view class="book-page right"></view>
-            <view class="book-spine"></view>
+          <view class="near-id">
+            <view class="near-name">{{ item.name || '未命名设备' }}</view>
+            <view class="near-mac">{{ item.RSSI }} dBm · 可接入</view>
           </view>
+          <text class="near-rssi">{{ item.kind === 'story' ? '故事机' : '风扇' }}</text>
+          <view class="pill" @tap.stop="onAdopt(item)">接入</view>
         </view>
-        <view class="near-id">
-          <view class="near-name">{{ item.name || '未命名设备' }}</view>
-          <view class="near-mac">{{ item.RSSI }} dBm · 可接入</view>
-        </view>
-        <text class="near-rssi">{{ item.kind === 'story' ? '故事机' : '风扇' }}</text>
-        <view class="pill" @tap.stop="onAdopt(item)">接入</view>
       </view>
     </view>
 
